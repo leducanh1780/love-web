@@ -15,25 +15,20 @@ body {
   overflow: hidden;
 }
 
-/* NỀN ẢNH */
 .app {
   position: relative;
   width: 100%;
   height: 100vh;
-  background: url("Cover.jpg") center/cover no-repeat;
+  background: url("bg.jpg") center/cover no-repeat;
 }
 
-/* LỚP LÀM DỊU ẢNH */
 .overlay {
   position: absolute;
   inset: 0;
-  background:
-    radial-gradient(circle at top, rgba(255,255,255,0.75), rgba(255,240,245,0.92)),
-    rgba(0,0,0,0.15);
+  background: rgba(0,0,0,0.25);
   backdrop-filter: blur(6px);
 }
 
-/* MÀN */
 .screen {
   position: relative;
   z-index: 2;
@@ -52,18 +47,18 @@ body {
 h1 {
   font-size: 26px;
   margin-bottom: 8px;
-  color: #5a3a3a;
+  color: #fff;
 }
 
 .subtitle {
   font-size: 14px;
-  opacity: 0.7;
+  opacity: 0.75;
+  color: #fff;
   margin-bottom: 28px;
 }
 
-/* THẺ THOẠI */
 .card {
-  background: rgba(255,255,255,0.75);
+  background: rgba(255,255,255,0.85);
   backdrop-filter: blur(8px);
   padding: 22px;
   border-radius: 22px;
@@ -71,21 +66,26 @@ h1 {
   font-size: 18px;
   line-height: 1.6;
   color: #4a2f2f;
-  box-shadow: 0 10px 30px rgba(0,0,0,0.08);
+  box-shadow: 0 10px 30px rgba(0,0,0,0.15);
+  animation: fade 0.4s ease;
 }
 
-/* NÚT TRÁI TIM */
+@keyframes fade {
+  from { opacity: 0; transform: translateY(6px); }
+  to { opacity: 1; transform: translateY(0); }
+}
+
 .heart-btn {
   margin-top: 28px;
   width: 64px;
   height: 64px;
   border-radius: 50%;
   border: none;
-  background: rgba(255,182,193,0.85);
+  background: rgba(255,182,193,0.9);
   font-size: 28px;
   color: #fff;
   cursor: pointer;
-  box-shadow: 0 8px 20px rgba(0,0,0,0.15);
+  box-shadow: 0 8px 20px rgba(0,0,0,0.25);
   animation: pulse 1.6s infinite;
 }
 
@@ -95,26 +95,16 @@ h1 {
   100% { transform: scale(1); }
 }
 
-/* TIM BAY */
 .heart {
   position: fixed;
-  color: rgba(255,182,193,0.8);
-  animation: float 8s linear infinite;
+  color: rgba(255,182,193,0.85);
   pointer-events: none;
+  animation: float 6s linear;
 }
 
 @keyframes float {
-  0% { transform: translateY(110vh); opacity: 0; }
-  15% { opacity: 1; }
-  100% { transform: translateY(-10vh); opacity: 0; }
-}
-
-.footer {
-  position: absolute;
-  bottom: 22px;
-  font-size: 13px;
-  opacity: 0.6;
-  color: #5a3a3a;
+  from { transform: translateY(0); opacity: 1; }
+  to { transform: translateY(-120px); opacity: 0; }
 }
 </style>
 </head>
@@ -124,64 +114,72 @@ h1 {
 <div class="app">
   <div class="overlay"></div>
 
+  <audio id="music" src="lofi.mp3" loop></audio>
+
   <!-- MÀN CHÀO -->
   <div class="screen active" id="gate">
-    <h1>💗 Mỗi Ngày Có Chồng</h1>
+    <h1>Mỗi Ngày Có Chồng</h1>
     <div class="subtitle">Cho người chồng thương nhất</div>
-    <button class="heart-btn" onclick="enter()">❤</button>
-    <div class="footer">Chồng làm cái này không phải vì rảnh, mà vì thương.</div>
+    <button class="heart-btn" onclick="enter(event)">❤</button>
   </div>
 
   <!-- MÀN CHÍNH -->
   <div class="screen" id="main">
-    <h1>Hôm nay chồng nói với em</h1>
-
-    <div class="card" id="message">
-      Em chạm trái tim đi, chồng nói.
-    </div>
-
-    <button class="heart-btn" onclick="nextMessage()">❤</button>
+    <h1>Chồng nói với em</h1>
+    <div class="card" id="message">Em chạm tim đi.</div>
+    <button class="heart-btn" onclick="nextMessage(event)">❤</button>
   </div>
 </div>
 
 <script>
 const messages = [
   "Cảm ơn em đã ở bên chồng.",
-  "Mỗi ngày có em là một ngày chồng trân trọng.",
-  "Chồng không nói nhiều, nhưng chồng thương sâu.",
-  "Em là nhà, chồng chỉ cần về.",
-  "Chồng chọn em, mỗi ngày đều chọn.",
-  "Em mệt thì tựa vào chồng.",
-  "Chồng ở đây, không biến mất."
-  // 👉 ANH TỰ VIẾT THÊM THOẠI CỦA MÌNH
+  "Chồng thương em theo cách rất yên.",
+  "Có em, chồng không cần gì thêm.",
+  "Em là nơi chồng muốn quay về.",
+  "Chồng không hoàn hảo, nhưng thương thật."
+  // 👉 anh tự viết thêm
 ];
 
 let used = [];
+let musicStarted = false;
 
-function enter() {
+function enter(e) {
   document.getElementById("gate").classList.remove("active");
   document.getElementById("main").classList.add("active");
+  playMusic();
+  spawnHeart(e);
 }
 
-function nextMessage() {
+function nextMessage(e) {
   if (used.length === messages.length) used = [];
   let i;
   do { i = Math.floor(Math.random() * messages.length); }
   while (used.includes(i));
   used.push(i);
   document.getElementById("message").innerText = messages[i];
+  playMusic();
+  spawnHeart(e);
 }
 
-/* TIM BAY */
-setInterval(() => {
+function playMusic() {
+  if (!musicStarted) {
+    const m = document.getElementById("music");
+    m.volume = 0.15;
+    m.play();
+    musicStarted = true;
+  }
+}
+
+function spawnHeart(e) {
   const h = document.createElement("div");
   h.className = "heart";
   h.innerText = "❤";
-  h.style.left = Math.random() * 100 + "vw";
-  h.style.fontSize = (12 + Math.random() * 20) + "px";
+  h.style.left = e.clientX + "px";
+  h.style.top = e.clientY + "px";
   document.body.appendChild(h);
-  setTimeout(() => h.remove(), 8000);
-}, 600);
+  setTimeout(() => h.remove(), 6000);
+}
 </script>
 
 </body>
