@@ -1,0 +1,160 @@
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<title>Cho người anh thương</title>
+
+<style>
+body {
+  margin: 0;
+  font-family: system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
+  background: #fff0f5;
+  overflow-x: hidden;
+}
+
+.container {
+  max-width: 420px;
+  margin: auto;
+  background: #fff;
+  min-height: 100vh;
+  text-align: center;
+  position: relative;
+}
+
+.header img {
+  width: 100%;
+  height: 260px;
+  object-fit: cover;
+  border-bottom-left-radius: 30px;
+  border-bottom-right-radius: 30px;
+}
+
+.overlay {
+  position: absolute;
+  top: 0;
+  width: 100%;
+  height: 260px;
+  background: rgba(255,255,255,0.15);
+}
+
+.content {
+  padding: 24px;
+}
+
+button {
+  background: #f6b6c9;
+  border: none;
+  padding: 14px 26px;
+  border-radius: 30px;
+  font-size: 16px;
+  cursor: pointer;
+}
+
+.message {
+  font-size: 18px;
+  line-height: 1.6;
+  margin: 30px 0;
+  min-height: 90px;
+  background: #fff7fb;
+  border-radius: 18px;
+  padding: 14px;
+  border: 1px solid rgba(246,182,201,.5);
+}
+
+.heart {
+  position: fixed;
+  color: pink;
+  font-size: 14px;
+  animation: float 6s linear infinite;
+  pointer-events: none;
+}
+
+@keyframes float {
+  0% { transform: translateY(100vh); opacity: 0; }
+  10% { opacity: 1; }
+  100% { transform: translateY(-10vh); opacity: 0; }
+}
+</style>
+</head>
+
+<body>
+
+<div class="container">
+
+  <div class="header">
+    <img src="cover.jpg">
+    <div class="overlay"></div>
+  </div>
+
+  <div class="content">
+    <h3>Cho người anh thương nhất</h3>
+
+    <div class="message" id="message">
+      Nhấn “Vào” để anh nói với em.
+    </div>
+
+    <button onclick="enterLove()">Vào</button>
+  </div>
+
+</div>
+
+<script>
+const baseMessages = [
+  "Anh ở đây.",
+  "Hôm nay em mệt cũng được.",
+  "Có anh rồi, không cần cố.",
+  "Anh thương em, đơn giản vậy thôi.",
+  "Em là nhà của anh.",
+  "Không cần hoàn hảo, chỉ cần là em.",
+  "Anh chọn em, mỗi ngày.",
+  "Nếu buồn, cứ dựa vào anh.",
+  "Anh không hứa nhiều, anh ở lại.",
+  "Chỉ cần em bình an.",
+  "Anh muốn ôm em thật chặt.",
+  "Anh thương em theo kiểu lâu dài.",
+  "Em không một mình đâu.",
+  "Anh sẽ luôn ở phía em.",
+  "Anh yêu em, không cần lý do."
+];
+
+// tạo đủ 300 câu
+const messages = [];
+while (messages.length < 300) {
+  baseMessages.forEach(m => {
+    if (messages.length < 300) {
+      messages.push(
+        m.replace(/[.!]?$/, "") + 
+        [" 🩷"," 💕"," 💗"," 💖"," 🤍"," ✨"][messages.length % 6]
+      );
+    }
+  });
+}
+
+let used = [];
+
+function enterLove() {
+  if (used.length === messages.length) used = [];
+  let i;
+  do {
+    i = Math.floor(Math.random() * messages.length);
+  } while (used.includes(i));
+  used.push(i);
+  document.getElementById("message").innerText = messages[i];
+}
+
+// trái tim bay
+setInterval(() => {
+  const heart = document.createElement("div");
+  heart.className = "heart";
+  heart.innerText = "❤";
+  heart.style.left = Math.random() * 100 + "vw";
+  heart.style.fontSize = (12 + Math.random() * 18) + "px";
+  heart.style.animationDuration = (4 + Math.random() * 4) + "s";
+  document.body.appendChild(heart);
+  setTimeout(() => heart.remove(), 6000);
+}, 450);
+</script>
+
+</body>
+  </html>
