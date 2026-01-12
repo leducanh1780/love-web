@@ -1,4 +1,3 @@
-
 <!DOCTYPE html>
 <html lang="vi">
 <head>
@@ -9,47 +8,100 @@
 <style>
 body {
   margin: 0;
-  height: 100vh;
-  background: #fff6f0;
-  display: flex;
-  align-items: center;
-  justify-content: center;
+  min-height: 100vh;
+  background: linear-gradient(180deg, #fff1ea, #fff8f4);
   font-family: system-ui, -apple-system, "Segoe UI", sans-serif;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  overflow: hidden;
 }
 
 .app {
   width: 100%;
-  max-width: 380px;
-  padding: 28px;
+  max-width: 390px;
+  padding: 24px;
   text-align: center;
+  position: relative;
+}
+
+.header {
+  margin-bottom: 20px;
+}
+
+.header h1 {
+  font-size: 22px;
+  font-weight: 600;
+  margin: 0;
+  color: #4a2f2f;
+}
+
+.header .date {
+  font-size: 13px;
+  opacity: 0.6;
+  margin-top: 6px;
 }
 
 .card {
-  background: #ffffff;
-  border-radius: 22px;
+  background: rgba(255,255,255,0.9);
+  border-radius: 24px;
   padding: 26px;
-  font-size: 18px;
-  line-height: 1.7;
+  font-size: 17px;
+  line-height: 1.8;
   color: #3f2b2b;
-  box-shadow: 0 10px 30px rgba(0,0,0,0.06);
-  margin-bottom: 22px;
+  box-shadow: 0 12px 30px rgba(0,0,0,0.06);
 }
 
 .heart-btn {
-  width: 42px;
-  height: 42px;
+  margin-top: 22px;
+  width: 46px;
+  height: 46px;
   border-radius: 50%;
   border: none;
-  background: #f3b6c2;
+  background: #f3a8b6;
   color: #fff;
   font-size: 18px;
   cursor: pointer;
 }
 
+.action-text {
+  margin-top: 10px;
+  font-size: 13px;
+  opacity: 0.6;
+}
+
 .footer {
-  margin-top: 18px;
+  margin-top: 24px;
   font-size: 12px;
   opacity: 0.45;
+}
+
+.music-btn {
+  position: absolute;
+  top: 16px;
+  right: 16px;
+  width: 34px;
+  height: 34px;
+  border-radius: 50%;
+  border: none;
+  background: rgba(255,255,255,0.8);
+  font-size: 16px;
+  cursor: pointer;
+}
+
+/* tim bay rất nhẹ */
+.heart {
+  position: fixed;
+  bottom: -20px;
+  color: #f1a7b4;
+  font-size: 12px;
+  opacity: 0.25;
+  animation: float 10s linear forwards;
+}
+
+@keyframes float {
+  from { transform: translateY(0); }
+  to { transform: translateY(-120vh); }
 }
 </style>
 </head>
@@ -57,38 +109,90 @@ body {
 <body>
 
 <div class="app">
+  <button class="music-btn" onclick="toggleMusic()">🔈</button>
+
+  <div class="header">
+    <h1>💗 Gửi em yêu</h1>
+    <div class="date" id="date"></div>
+  </div>
+
   <div class="card" id="message">
-    Em chạm tim đi, chồng nói.
+    Đôi khi chồng lặng lẽ nhìn em và nghĩ<br>
+    sao chồng may mắn đến vậy.<br><br>
+    Có em là đủ cho một ngày.
   </div>
 
-  <button class="heart-btn" onclick="next()">❤</button>
+  <button class="heart-btn" onclick="nextMessage()">❤</button>
+  <div class="action-text">Hôm nay chồng nói với em</div>
 
-  <div class="footer">
-    Mỗi ngày có chồng.
-  </div>
+  <div class="footer">Mỗi ngày có chồng.</div>
 </div>
+
+<audio id="music" loop>
+  <source src="lofi.mp3" type="audio/mpeg">
+</audio>
 
 <script>
 const messages = [
-  "Chồng ở đây.",
-  "Hôm nay có mệt cũng không sao.",
-  "Chồng thương em theo cách rất yên.",
-  "Có em là đủ một ngày.",
-  "Chồng không giỏi nói, nhưng không bỏ đi.",
-  "Em là nơi chồng muốn quay về."
-  // anh tự thêm câu của anh
+  `Đôi khi chồng lặng lẽ nhìn em và nghĩ<br>
+   sao chồng may mắn đến vậy.<br><br>
+   Em là món quà đẹp nhất đời chồng.`,
+  `Chồng không giỏi nói lời hoa mỹ,<br>
+   nhưng mỗi ngày ở cạnh em<br>
+   đều là điều chồng trân trọng.`,
+  `Có những ngày mệt,<br>
+   chỉ cần em ở đó,<br>
+   là mọi thứ dịu lại.`,
+  `Chồng không hứa hoàn hảo,<br>
+   chỉ hứa ở lại.`,
+  `Nếu có lúc em buồn,<br>
+   cứ tựa vào chồng một chút thôi.`
+  // anh thêm lời của anh ở đây
 ];
 
 let used = [];
+const msgBox = document.getElementById("message");
 
-function next() {
+function nextMessage() {
   if (used.length === messages.length) used = [];
   let i;
   do {
     i = Math.floor(Math.random() * messages.length);
   } while (used.includes(i));
   used.push(i);
-  document.getElementById("message").innerText = messages[i];
+  msgBox.innerHTML = messages[i];
+}
+
+function spawnHeart() {
+  const h = document.createElement("div");
+  h.className = "heart";
+  h.innerText = "❤";
+  h.style.left = Math.random() * 100 + "vw";
+  document.body.appendChild(h);
+  setTimeout(() => h.remove(), 10000);
+}
+setInterval(spawnHeart, 1200);
+
+// date
+const d = new Date();
+document.getElementById("date").innerText =
+  d.toLocaleDateString("vi-VN", {
+    weekday: "long",
+    day: "numeric",
+    month: "long",
+    year: "numeric"
+  });
+
+// music
+const music = document.getElementById("music");
+let playing = false;
+function toggleMusic() {
+  if (playing) {
+    music.pause();
+  } else {
+    music.play();
+  }
+  playing = !playing;
 }
 </script>
 
