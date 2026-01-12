@@ -6,9 +6,7 @@
 <title>Mỗi Ngày Có Chồng</title>
 
 <style>
-* {
-  box-sizing: border-box;
-}
+* { box-sizing: border-box; }
 
 body {
   margin: 0;
@@ -17,6 +15,7 @@ body {
   overflow: hidden;
 }
 
+/* NỀN ẢNH */
 .app {
   position: relative;
   width: 100%;
@@ -24,12 +23,17 @@ body {
   background: url("Cover.jpg") center/cover no-repeat;
 }
 
+/* LỚP LÀM DỊU ẢNH */
 .overlay {
   position: absolute;
   inset: 0;
-  background: rgba(255, 245, 240, 0.82);
+  background:
+    radial-gradient(circle at top, rgba(255,255,255,0.75), rgba(255,240,245,0.92)),
+    rgba(0,0,0,0.15);
+  backdrop-filter: blur(6px);
 }
 
+/* MÀN */
 .screen {
   position: relative;
   z-index: 2;
@@ -39,62 +43,78 @@ body {
   flex-direction: column;
   align-items: center;
   justify-content: center;
-  padding: 24px;
+  padding: 28px;
   text-align: center;
 }
 
-.screen.active {
-  display: flex;
-}
+.screen.active { display: flex; }
 
 h1 {
-  font-size: 28px;
-  margin-bottom: 6px;
+  font-size: 26px;
+  margin-bottom: 8px;
+  color: #5a3a3a;
 }
 
 .subtitle {
+  font-size: 14px;
   opacity: 0.7;
-  margin-bottom: 24px;
+  margin-bottom: 28px;
 }
 
+/* THẺ THOẠI */
 .card {
-  background: rgba(255,255,255,0.9);
+  background: rgba(255,255,255,0.75);
+  backdrop-filter: blur(8px);
   padding: 22px;
   border-radius: 22px;
   max-width: 360px;
   font-size: 18px;
   line-height: 1.6;
+  color: #4a2f2f;
+  box-shadow: 0 10px 30px rgba(0,0,0,0.08);
 }
 
-button {
-  margin-top: 26px;
-  padding: 14px 26px;
-  border-radius: 30px;
+/* NÚT TRÁI TIM */
+.heart-btn {
+  margin-top: 28px;
+  width: 64px;
+  height: 64px;
+  border-radius: 50%;
   border: none;
-  font-size: 16px;
-  background: #f4b6c2;
+  background: rgba(255,182,193,0.85);
+  font-size: 28px;
+  color: #fff;
   cursor: pointer;
+  box-shadow: 0 8px 20px rgba(0,0,0,0.15);
+  animation: pulse 1.6s infinite;
 }
 
-.footer {
-  position: absolute;
-  bottom: 20px;
-  opacity: 0.6;
-  font-size: 13px;
+@keyframes pulse {
+  0% { transform: scale(1); }
+  50% { transform: scale(1.08); }
+  100% { transform: scale(1); }
 }
 
-/* tim bay */
+/* TIM BAY */
 .heart {
   position: fixed;
-  color: pink;
-  animation: float 6s linear infinite;
+  color: rgba(255,182,193,0.8);
+  animation: float 8s linear infinite;
   pointer-events: none;
 }
 
 @keyframes float {
   0% { transform: translateY(110vh); opacity: 0; }
-  10% { opacity: 1; }
+  15% { opacity: 1; }
   100% { transform: translateY(-10vh); opacity: 0; }
+}
+
+.footer {
+  position: absolute;
+  bottom: 22px;
+  font-size: 13px;
+  opacity: 0.6;
+  color: #5a3a3a;
 }
 </style>
 </head>
@@ -108,19 +128,19 @@ button {
   <div class="screen active" id="gate">
     <h1>💗 Mỗi Ngày Có Chồng</h1>
     <div class="subtitle">Cho người chồng thương nhất</div>
-    <button onclick="enter()">Vào với chồng</button>
+    <button class="heart-btn" onclick="enter()">❤</button>
     <div class="footer">Chồng làm cái này không phải vì rảnh, mà vì thương.</div>
   </div>
 
-  <!-- MÀN NỘI DUNG -->
+  <!-- MÀN CHÍNH -->
   <div class="screen" id="main">
     <h1>Hôm nay chồng nói với em</h1>
 
     <div class="card" id="message">
-      Em bấm nút đi, chồng nói.
+      Em chạm trái tim đi, chồng nói.
     </div>
 
-    <button onclick="nextMessage()">Chồng nói với em</button>
+    <button class="heart-btn" onclick="nextMessage()">❤</button>
   </div>
 </div>
 
@@ -128,12 +148,12 @@ button {
 const messages = [
   "Cảm ơn em đã ở bên chồng.",
   "Mỗi ngày có em là một ngày chồng trân trọng.",
-  "Chồng không giỏi nói hay, nhưng chồng thương em.",
+  "Chồng không nói nhiều, nhưng chồng thương sâu.",
   "Em là nhà, chồng chỉ cần về.",
-  "Chồng chọn em, không phải một ngày, mà là mỗi ngày.",
+  "Chồng chọn em, mỗi ngày đều chọn.",
   "Em mệt thì tựa vào chồng.",
-  "Chồng ở đây, không đi đâu cả."
-  // 👉 ANH TỰ THÊM THOẠI CỦA ANH Ở ĐÂY
+  "Chồng ở đây, không biến mất."
+  // 👉 ANH TỰ VIẾT THÊM THOẠI CỦA MÌNH
 ];
 
 let used = [];
@@ -146,23 +166,22 @@ function enter() {
 function nextMessage() {
   if (used.length === messages.length) used = [];
   let i;
-  do {
-    i = Math.floor(Math.random() * messages.length);
-  } while (used.includes(i));
+  do { i = Math.floor(Math.random() * messages.length); }
+  while (used.includes(i));
   used.push(i);
   document.getElementById("message").innerText = messages[i];
 }
 
-// tim bay
+/* TIM BAY */
 setInterval(() => {
-  const heart = document.createElement("div");
-  heart.className = "heart";
-  heart.innerText = "❤";
-  heart.style.left = Math.random() * 100 + "vw";
-  heart.style.fontSize = (12 + Math.random() * 18) + "px";
-  document.body.appendChild(heart);
-  setTimeout(() => heart.remove(), 6000);
-}, 500);
+  const h = document.createElement("div");
+  h.className = "heart";
+  h.innerText = "❤";
+  h.style.left = Math.random() * 100 + "vw";
+  h.style.fontSize = (12 + Math.random() * 20) + "px";
+  document.body.appendChild(h);
+  setTimeout(() => h.remove(), 8000);
+}, 600);
 </script>
 
 </body>
