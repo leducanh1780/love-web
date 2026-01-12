@@ -1,160 +1,90 @@
 <!DOCTYPE html>
 <html lang="vi">
 <head>
-<meta charset="UTF-8" />
-<meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>Gửi Vợ Yêu</title>
 
 <style>
 body {
   margin: 0;
   font-family: system-ui, sans-serif;
-  background: #fdeeee;
+  background: #fff3ef;
   height: 100vh;
-  overflow: hidden;
+  display: flex;
+  align-items: center;
+  justify-content: center;
 }
 
-.menu-btn {
-  position: fixed;
-  top: 16px;
-  left: 16px;
-  font-size: 26px;
-  cursor: pointer;
-  z-index: 10;
+.box {
+  width: 320px;
+  text-align: center;
 }
 
-.heart-btn {
-  position: fixed;
-  bottom: 120px;
-  left: 50%;
-  transform: translateX(-50%);
+.message {
+  background: rgba(255,255,255,0.7);
+  border-radius: 18px;
+  padding: 22px;
+  font-size: 18px;
+  line-height: 1.6;
+}
+
+.heart {
+  margin-top: 24px;
   font-size: 42px;
   cursor: pointer;
   user-select: none;
 }
 
-.card {
-  max-width: 320px;
-  margin: 120px auto 0;
-  background: rgba(255,255,255,0.7);
-  border-radius: 20px;
-  padding: 24px;
-  text-align: center;
-  font-size: 18px;
-  line-height: 1.6;
-}
-
-/* MENU */
-.menu {
-  position: fixed;
-  top: 0;
-  left: -100%;
-  width: 80%;
-  height: 100%;
-  background: #fff;
-  transition: 0.3s;
-  padding: 20px;
-  z-index: 20;
-}
-
-.menu.show {
-  left: 0;
-}
-
-.menu h3 {
-  margin-top: 0;
-}
-
-.menu ul {
-  padding-left: 20px;
-}
-
-.menu textarea {
-  width: 100%;
-  height: 80px;
-  margin-top: 10px;
-}
-
-.menu button {
-  margin-top: 10px;
-  padding: 8px 14px;
-  border: none;
-  border-radius: 12px;
-  background: #f7a8b8;
-  color: #fff;
+.add {
+  margin-top: 16px;
+  font-size: 14px;
+  color: #888;
+  cursor: pointer;
 }
 </style>
 </head>
 
 <body>
 
-<div class="menu-btn" onclick="toggleMenu()">☰</div>
+<div class="box">
+  <div class="message" id="message">
+    Có vợ là đủ một ngày.
+  </div>
 
-<div class="menu" id="menu">
-  <h3>📌 Đã lưu</h3>
-  <ul id="savedList"></ul>
+  <div class="heart" id="heart">🤍</div>
 
-  <h3>✍️ Thêm câu</h3>
-  <textarea id="newText" placeholder="Gõ câu cho vợ..."></textarea>
-  <button onclick="addText()">Lưu</button>
-
-  <br><br>
-  <button onclick="toggleMenu()">⬅️ Thoát</button>
+  <div class="add" onclick="addText()">+ Thêm câu của chồng</div>
 </div>
-
-<div class="card" id="message">
-  Không phải ngày nào cũng hoàn hảo, nhưng ngày nào có vợ cũng là ngày đáng giữ.
-</div>
-
-<div class="heart-btn" id="heart">🤍</div>
 
 <script>
 let saved = JSON.parse(localStorage.getItem("savedTexts")) || [];
-let currentText = document.getElementById("message").innerText;
-let liked = false;
+let current = document.getElementById("message").innerText;
+let liked = saved.includes(current);
 
 const heart = document.getElementById("heart");
+heart.innerText = liked ? "❤️" : "🤍";
 
-heart.addEventListener("dblclick", () => {
+heart.onclick = () => {
   liked = !liked;
   heart.innerText = liked ? "❤️" : "🤍";
 
-  if (liked && !saved.includes(currentText)) {
-    saved.push(currentText);
-    localStorage.setItem("savedTexts", JSON.stringify(saved));
+  if (liked && !saved.includes(current)) {
+    saved.push(current);
   }
-
   if (!liked) {
-    saved = saved.filter(t => t !== currentText);
-    localStorage.setItem("savedTexts", JSON.stringify(saved));
+    saved = saved.filter(t => t !== current);
   }
-
-  renderSaved();
-});
-
-function toggleMenu() {
-  document.getElementById("menu").classList.toggle("show");
-  renderSaved();
-}
-
-function renderSaved() {
-  const list = document.getElementById("savedList");
-  list.innerHTML = "";
-  saved.forEach((t, i) => {
-    const li = document.createElement("li");
-    li.innerText = `${i + 1}. ${t}`;
-    list.appendChild(li);
-  });
-}
+  localStorage.setItem("savedTexts", JSON.stringify(saved));
+};
 
 function addText() {
-  const text = document.getElementById("newText").value.trim();
+  const text = prompt("Chồng muốn nói gì với vợ?");
   if (!text) return;
-  currentText = text;
+  current = text;
   document.getElementById("message").innerText = text;
-  document.getElementById("newText").value = "";
-  liked = false;
-  heart.innerText = "🤍";
+  liked = saved.includes(text);
+  heart.innerText = liked ? "❤️" : "🤍";
 }
 </script>
 
