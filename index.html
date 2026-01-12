@@ -5,12 +5,15 @@
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>Gửi Vợ Yêu</title>
 
+<link rel="manifest" href="manifest.json">
+<meta name="theme-color" content="#f5b6c4">
+
 <style>
 body {
   margin: 0;
   min-height: 100vh;
   font-family: system-ui, -apple-system, "Segoe UI", sans-serif;
-  background: 
+  background:
     linear-gradient(rgba(255,200,210,0.55), rgba(255,200,210,0.55)),
     url('bg.jpg') center/cover no-repeat;
   display: flex;
@@ -45,7 +48,6 @@ body {
   opacity: 0.6;
 }
 
-/* CÂU NEO CẢM XÚC */
 .anchor {
   margin-top: 18px;
   font-size: 15px;
@@ -62,12 +64,6 @@ body {
   font-size: 18px;
   line-height: 1.8;
   box-shadow: 0 20px 40px rgba(0,0,0,0.12);
-}
-
-.heart-icon {
-  margin-top: 16px;
-  font-size: 20px;
-  opacity: 0.6;
 }
 
 .btn {
@@ -91,7 +87,6 @@ body {
   opacity: 0.45;
 }
 
-/* tim bay */
 .heart {
   position: fixed;
   bottom: -20px;
@@ -115,17 +110,9 @@ body {
     <div class="sub">Thêm một ngày chồng được yêu vợ</div>
   </div>
 
-  <div class="anchor">
-    Lại một ngày được gặp vợ
-  </div>
+  <div class="anchor">Lại một ngày được gặp vợ</div>
 
-  <div class="card" id="message">
-    Đôi khi chồng lặng lẽ nhìn vợ và nghĩ:<br>
-    sao mình may mắn đến vậy.<br><br>
-    Vợ là món quà đẹp nhất đời chồng.
-  </div>
-
-  <div class="heart-icon">♡</div>
+  <div class="card" id="message"></div>
 
   <button class="btn" onclick="next()">❤ Chồng dành cho vợ</button>
 
@@ -134,18 +121,26 @@ body {
 
 <script>
 const messages = [
-  `Đôi khi chồng lặng lẽ nhìn vợ và nghĩ:<br>
-   sao mình may mắn đến vậy.<br><br>
-   Vợ là món quà đẹp nhất đời chồng.`,
-  `Không phải ngày nào cũng hoàn hảo,<br>
-   nhưng ngày nào có vợ<br>
-   cũng là ngày đáng giữ.`,
-  `Chồng không nói nhiều,<br>
-   nhưng từng ngày ở bên vợ<br>
-   đều là thật.`,
-  `Nếu có lúc vợ mệt,<br>
-   cứ để chồng thương vợ nhiều hơn một chút.`
-  // anh thêm lời của anh ở đây
+  `Vợ ơi anh nhớ vợ lắm.`,
+  `Lại một ngày được gặp vợ.`,
+  `Anh yêu vợ nhiều lắm.`,
+  `Chồng thương vợ theo cách rất yên.`,
+  `Huhu anh nhớ vợ lắm luôn.`,
+  `Có vợ là đủ một ngày.`,
+  `Vợ đang làm gì đó,<br>còn anh đang rất nhớ vợ luôn.`,
+  `Vợ là nơi chồng muốn quay về.`,
+  `Anh sẽ luôn trở về.`,
+  `Chồng ở lại, không đi đâu cả.`,
+  `Hôm nay gặp vợ thật là vui.`,
+  `Có vợ, lòng chồng yên.`,
+  `Có vợ thật là vui.`,
+  `Một ngày nữa được yêu vợ.`,
+  `Vợ ơi vợ biết không,<br>anh yêu vợ nhiều lắm.`,
+  `Vợ là điều đúng nhất đời chồng.`,
+  `Anh nhớ vợ.`,
+  `Nhớ vợ nhiều hơn hôm qua.`,
+  `Chỉ cần vợ bình an là đủ.`,
+  `Chồng ở đây.`
 ];
 
 let used = [];
@@ -160,6 +155,8 @@ function next() {
   document.getElementById("message").innerHTML = messages[i];
 }
 
+next();
+
 // ngày tháng
 const d = new Date();
 document.getElementById("date").innerText =
@@ -170,7 +167,7 @@ document.getElementById("date").innerText =
     year: "numeric"
   });
 
-// tim bay nhẹ
+// tim bay
 setInterval(() => {
   const h = document.createElement("div");
   h.className = "heart";
@@ -180,7 +177,52 @@ setInterval(() => {
   document.body.appendChild(h);
   setTimeout(() => h.remove(), 12000);
 }, 1400);
+
+// đăng ký service worker
+if ("serviceWorker" in navigator) {
+  navigator.serviceWorker.register("sw.js");
+}
 </script>
 
 </body>
 </html>
+{
+  "name": "Gửi Vợ Yêu",
+  "short_name": "Gửi Vợ",
+  "start_url": ".",
+  "display": "standalone",
+  "background_color": "#fff0f3",
+  "theme_color": "#f5b6c4",
+  "icons": [
+    {
+      "src": "https://cdn-icons-png.flaticon.com/512/833/833472.png",
+      "sizes": "192x192",
+      "type": "image/png"
+    },
+    {
+      "src": "https://cdn-icons-png.flaticon.com/512/833/833472.png",
+      "sizes": "512x512",
+      "type": "image/png"
+    }
+  ]
+}
+self.addEventListener("install", e => {
+  e.waitUntil(
+    caches.open("love-v1").then(cache => {
+      return cache.addAll([
+        "./",
+        "./index.html",
+        "./manifest.json",
+        "./bg.jpg"
+      ]);
+    })
+  );
+});
+
+self.addEventListener("fetch", e => {
+  e.respondWith(
+    caches.match(e.request).then(res => {
+      return res || fetch(e.request);
+    })
+  );
+});
