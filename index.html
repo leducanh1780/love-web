@@ -1,169 +1,161 @@
 <!DOCTYPE html>
 <html lang="vi">
 <head>
-<meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0"/>
 <title>Gửi Vợ Yêu</title>
 
 <style>
 body {
   margin: 0;
-  min-height: 100vh;
-  font-family: system-ui, -apple-system, "Segoe UI", sans-serif;
-  background: 
-    linear-gradient(rgba(255,200,210,0.55), rgba(255,200,210,0.55)),
-    url('bg.jpg') center/cover no-repeat;
-  display: flex;
-  justify-content: center;
-  align-items: center;
+  font-family: system-ui, sans-serif;
+  background: #fdeeee;
+  height: 100vh;
   overflow: hidden;
 }
 
-.app {
-  max-width: 380px;
-  width: 100%;
-  padding: 26px;
-  text-align: center;
-  color: #5a2f2f;
-}
-
-.header h1 {
+.menu-btn {
+  position: fixed;
+  top: 16px;
+  left: 16px;
   font-size: 26px;
-  font-weight: 600;
-  margin: 0;
+  cursor: pointer;
+  z-index: 10;
 }
 
-.date {
-  margin-top: 8px;
-  font-size: 14px;
-  opacity: 0.7;
-}
-
-.sub {
-  margin-top: 4px;
-  font-size: 13px;
-  opacity: 0.6;
+.heart-btn {
+  position: fixed;
+  bottom: 120px;
+  left: 50%;
+  transform: translateX(-50%);
+  font-size: 42px;
+  cursor: pointer;
+  user-select: none;
 }
 
 .card {
-  margin-top: 28px;
-  background: rgba(255,255,255,0.55);
-  backdrop-filter: blur(8px);
-  border-radius: 26px;
-  padding: 28px;
+  max-width: 320px;
+  margin: 120px auto 0;
+  background: rgba(255,255,255,0.7);
+  border-radius: 20px;
+  padding: 24px;
+  text-align: center;
   font-size: 18px;
-  line-height: 1.8;
-  box-shadow: 0 20px 40px rgba(0,0,0,0.12);
+  line-height: 1.6;
 }
 
-.heart-icon {
-  margin-top: 16px;
-  font-size: 20px;
-  opacity: 0.6;
-}
-
-.btn {
-  margin-top: 26px;
-  background: #e98a9b;
-  border: none;
-  border-radius: 30px;
-  padding: 14px 28px;
-  font-size: 16px;
-  color: #fff;
-  cursor: pointer;
-}
-
-.footer {
-  margin-top: 30px;
-  font-size: 12px;
-  opacity: 0.45;
-}
-
-/* tim bay */
-.heart {
+/* MENU */
+.menu {
   position: fixed;
-  bottom: -20px;
-  color: rgba(255,255,255,0.5);
-  font-size: 14px;
-  animation: float 12s linear forwards;
+  top: 0;
+  left: -100%;
+  width: 80%;
+  height: 100%;
+  background: #fff;
+  transition: 0.3s;
+  padding: 20px;
+  z-index: 20;
 }
 
-@keyframes float {
-  to { transform: translateY(-120vh); opacity: 0; }
+.menu.show {
+  left: 0;
+}
+
+.menu h3 {
+  margin-top: 0;
+}
+
+.menu ul {
+  padding-left: 20px;
+}
+
+.menu textarea {
+  width: 100%;
+  height: 80px;
+  margin-top: 10px;
+}
+
+.menu button {
+  margin-top: 10px;
+  padding: 8px 14px;
+  border: none;
+  border-radius: 12px;
+  background: #f7a8b8;
+  color: #fff;
 }
 </style>
 </head>
 
 <body>
 
-<div class="app">
-  <div class="header">
-    <h1>💗 Gửi Vợ Yêu 💗</h1>
-    <div class="date" id="date"></div>
-    <div class="sub">Thêm một ngày chồng yêu vợ 💕</div>
-  </div>
+<div class="menu-btn" onclick="toggleMenu()">☰</div>
 
-  <div class="card" id="message">
-    Đôi khi chồng lặng lẽ nhìn vợ và nghĩ:<br>
-    sao mình may mắn đến vậy.<br><br>
-    Vợ là món quà đẹp nhất đời chồng.
-  </div>
+<div class="menu" id="menu">
+  <h3>📌 Đã lưu</h3>
+  <ul id="savedList"></ul>
 
-  <div class="heart-icon">♡</div>
+  <h3>✍️ Thêm câu</h3>
+  <textarea id="newText" placeholder="Gõ câu cho vợ..."></textarea>
+  <button onclick="addText()">Lưu</button>
 
-  <button class="btn" onclick="next()">❤ Chồng dành cho vợ</button>
-
-  <div class="footer">Tạo riêng cho vợ của chồng 🐱</div>
+  <br><br>
+  <button onclick="toggleMenu()">⬅️ Thoát</button>
 </div>
 
+<div class="card" id="message">
+  Không phải ngày nào cũng hoàn hảo, nhưng ngày nào có vợ cũng là ngày đáng giữ.
+</div>
+
+<div class="heart-btn" id="heart">🤍</div>
+
 <script>
-const messages = [
-  `Đôi khi chồng lặng lẽ nhìn vợ và nghĩ:<br>
-   sao mình may mắn đến vậy.<br><br>
-   Vợ là món quà đẹp nhất đời chồng.`,
-  `Không phải ngày nào cũng hoàn hảo,<br>
-   nhưng ngày nào có vợ<br>
-   cũng là ngày đáng giữ.`,
-  `Chồng không nói nhiều,<br>
-   nhưng từng ngày ở bên vợ<br>
-   đều là thật.`,
-  `Nếu có lúc vợ mệt,<br>
-   cứ để chồng thương vợ nhiều hơn một chút.`
-  // anh thêm lời của anh ở đây
-];
+let saved = JSON.parse(localStorage.getItem("savedTexts")) || [];
+let currentText = document.getElementById("message").innerText;
+let liked = false;
 
-let used = [];
+const heart = document.getElementById("heart");
 
-function next() {
-  if (used.length === messages.length) used = [];
-  let i;
-  do {
-    i = Math.floor(Math.random() * messages.length);
-  } while (used.includes(i));
-  used.push(i);
-  document.getElementById("message").innerHTML = messages[i];
+heart.addEventListener("dblclick", () => {
+  liked = !liked;
+  heart.innerText = liked ? "❤️" : "🤍";
+
+  if (liked && !saved.includes(currentText)) {
+    saved.push(currentText);
+    localStorage.setItem("savedTexts", JSON.stringify(saved));
+  }
+
+  if (!liked) {
+    saved = saved.filter(t => t !== currentText);
+    localStorage.setItem("savedTexts", JSON.stringify(saved));
+  }
+
+  renderSaved();
+});
+
+function toggleMenu() {
+  document.getElementById("menu").classList.toggle("show");
+  renderSaved();
 }
 
-// ngày tháng
-const d = new Date();
-document.getElementById("date").innerText =
-  d.toLocaleDateString("vi-VN", {
-    weekday: "long",
-    day: "numeric",
-    month: "long",
-    year: "numeric"
+function renderSaved() {
+  const list = document.getElementById("savedList");
+  list.innerHTML = "";
+  saved.forEach((t, i) => {
+    const li = document.createElement("li");
+    li.innerText = `${i + 1}. ${t}`;
+    list.appendChild(li);
   });
+}
 
-// tim bay nhẹ
-setInterval(() => {
-  const h = document.createElement("div");
-  h.className = "heart";
-  h.innerText = "❤";
-  h.style.left = Math.random() * 100 + "vw";
-  h.style.fontSize = 10 + Math.random() * 10 + "px";
-  document.body.appendChild(h);
-  setTimeout(() => h.remove(), 12000);
-}, 1400);
+function addText() {
+  const text = document.getElementById("newText").value.trim();
+  if (!text) return;
+  currentText = text;
+  document.getElementById("message").innerText = text;
+  document.getElementById("newText").value = "";
+  liked = false;
+  heart.innerText = "🤍";
+}
 </script>
 
 </body>
