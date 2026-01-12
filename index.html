@@ -8,84 +8,162 @@
 <style>
 body {
   margin: 0;
-  font-family: system-ui, sans-serif;
-  background: #fff3ef;
-  height: 100vh;
+  min-height: 100vh;
+  font-family: system-ui, -apple-system, "Segoe UI", sans-serif;
+  background: 
+    linear-gradient(rgba(255,200,210,0.55), rgba(255,200,210,0.55)),
+    url('bg.jpg') center/cover no-repeat;
   display: flex;
-  align-items: center;
   justify-content: center;
+  align-items: center;
+  overflow: hidden;
 }
 
-.box {
-  width: 320px;
+.app {
+  max-width: 380px;
+  width: 100%;
+  padding: 26px;
   text-align: center;
+  color: #5a2f2f;
 }
 
-.message {
-  background: rgba(255,255,255,0.7);
-  border-radius: 18px;
-  padding: 22px;
-  font-size: 18px;
-  line-height: 1.6;
+.header h1 {
+  font-size: 26px;
+  font-weight: 600;
+  margin: 0;
 }
 
-.heart {
-  margin-top: 24px;
-  font-size: 42px;
-  cursor: pointer;
-  user-select: none;
-}
-
-.add {
-  margin-top: 16px;
+.date {
+  margin-top: 8px;
   font-size: 14px;
-  color: #888;
+  opacity: 0.7;
+}
+
+.sub {
+  margin-top: 4px;
+  font-size: 13px;
+  opacity: 0.6;
+}
+
+.card {
+  margin-top: 28px;
+  background: rgba(255,255,255,0.55);
+  backdrop-filter: blur(8px);
+  border-radius: 26px;
+  padding: 28px;
+  font-size: 18px;
+  line-height: 1.8;
+  box-shadow: 0 20px 40px rgba(0,0,0,0.12);
+}
+
+.heart-icon {
+  margin-top: 16px;
+  font-size: 20px;
+  opacity: 0.6;
+}
+
+.btn {
+  margin-top: 26px;
+  background: #e98a9b;
+  border: none;
+  border-radius: 30px;
+  padding: 14px 28px;
+  font-size: 16px;
+  color: #fff;
   cursor: pointer;
+}
+
+.footer {
+  margin-top: 30px;
+  font-size: 12px;
+  opacity: 0.45;
+}
+
+/* tim bay */
+.heart {
+  position: fixed;
+  bottom: -20px;
+  color: rgba(255,255,255,0.5);
+  font-size: 14px;
+  animation: float 12s linear forwards;
+}
+
+@keyframes float {
+  to { transform: translateY(-120vh); opacity: 0; }
 }
 </style>
 </head>
 
 <body>
 
-<div class="box">
-  <div class="message" id="message">
-    Có vợ là đủ một ngày.
+<div class="app">
+  <div class="header">
+    <h1>💗 Gửi Vợ Yêu 💗</h1>
+    <div class="date" id="date"></div>
+    <div class="sub">Thêm một ngày chồng yêu vợ 💕</div>
   </div>
 
-  <div class="heart" id="heart">🤍</div>
+  <div class="card" id="message">
+    Đôi khi chồng lặng lẽ nhìn vợ và nghĩ:<br>
+    sao mình may mắn đến vậy.<br><br>
+    Vợ là món quà đẹp nhất đời chồng.
+  </div>
 
-  <div class="add" onclick="addText()">+ Thêm câu của chồng</div>
+  <div class="heart-icon">♡</div>
+
+  <button class="btn" onclick="next()">❤ Chồng dành cho vợ</button>
+
+  <div class="footer">Tạo riêng cho vợ của chồng 🐱</div>
 </div>
 
 <script>
-let saved = JSON.parse(localStorage.getItem("savedTexts")) || [];
-let current = document.getElementById("message").innerText;
-let liked = saved.includes(current);
+const messages = [
+  `Đôi khi chồng lặng lẽ nhìn vợ và nghĩ:<br>
+   sao mình may mắn đến vậy.<br><br>
+   Vợ là món quà đẹp nhất đời chồng.`,
+  `Không phải ngày nào cũng hoàn hảo,<br>
+   nhưng ngày nào có vợ<br>
+   cũng là ngày đáng giữ.`,
+  `Chồng không nói nhiều,<br>
+   nhưng từng ngày ở bên vợ<br>
+   đều là thật.`,
+  `Nếu có lúc vợ mệt,<br>
+   cứ để chồng thương vợ nhiều hơn một chút.`
+  // anh thêm lời của anh ở đây
+];
 
-const heart = document.getElementById("heart");
-heart.innerText = liked ? "❤️" : "🤍";
+let used = [];
 
-heart.onclick = () => {
-  liked = !liked;
-  heart.innerText = liked ? "❤️" : "🤍";
-
-  if (liked && !saved.includes(current)) {
-    saved.push(current);
-  }
-  if (!liked) {
-    saved = saved.filter(t => t !== current);
-  }
-  localStorage.setItem("savedTexts", JSON.stringify(saved));
-};
-
-function addText() {
-  const text = prompt("Chồng muốn nói gì với vợ?");
-  if (!text) return;
-  current = text;
-  document.getElementById("message").innerText = text;
-  liked = saved.includes(text);
-  heart.innerText = liked ? "❤️" : "🤍";
+function next() {
+  if (used.length === messages.length) used = [];
+  let i;
+  do {
+    i = Math.floor(Math.random() * messages.length);
+  } while (used.includes(i));
+  used.push(i);
+  document.getElementById("message").innerHTML = messages[i];
 }
+
+// ngày tháng
+const d = new Date();
+document.getElementById("date").innerText =
+  d.toLocaleDateString("vi-VN", {
+    weekday: "long",
+    day: "numeric",
+    month: "long",
+    year: "numeric"
+  });
+
+// tim bay nhẹ
+setInterval(() => {
+  const h = document.createElement("div");
+  h.className = "heart";
+  h.innerText = "❤";
+  h.style.left = Math.random() * 100 + "vw";
+  h.style.fontSize = 10 + Math.random() * 10 + "px";
+  document.body.appendChild(h);
+  setTimeout(() => h.remove(), 12000);
+}, 1400);
 </script>
 
 </body>
