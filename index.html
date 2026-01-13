@@ -22,6 +22,60 @@ body {
   overflow: hidden;
 }
 
+/* MENU */
+.menu-btn {
+  position: fixed;
+  top: 16px;
+  left: 16px;
+  font-size: 26px;
+  cursor: pointer;
+  z-index: 20;
+}
+
+.menu {
+  position: fixed;
+  top: 0;
+  left: -100%;
+  width: 80%;
+  height: 100%;
+  background: #fff;
+  padding: 18px;
+  transition: 0.3s;
+  z-index: 30;
+  overflow-y: auto;
+}
+
+.menu.show { left: 0; }
+
+.menu h3 {
+  margin: 10px 0;
+}
+
+.menu ul {
+  padding-left: 18px;
+  font-size: 14px;
+}
+
+.menu textarea {
+  width: 100%;
+  min-height: 80px;
+  border-radius: 14px;
+  border: 1px solid #ddd;
+  padding: 10px;
+  font-family: inherit;
+}
+
+.menu button {
+  margin-top: 10px;
+  padding: 10px 18px;
+  border: none;
+  border-radius: 20px;
+  background: #e98a9b;
+  color: #fff;
+  cursor: pointer;
+}
+
+/* APP */
 .app {
   max-width: 380px;
   width: 100%;
@@ -32,12 +86,11 @@ body {
 
 .header h1 {
   font-size: 26px;
-  font-weight: 600;
   margin: 0;
 }
 
 .date {
-  margin-top: 8px;
+  margin-top: 6px;
   font-size: 14px;
   opacity: 0.7;
 }
@@ -52,12 +105,11 @@ body {
   margin-top: 18px;
   font-size: 15px;
   opacity: 0.55;
-  letter-spacing: 0.3px;
 }
 
 .card {
   margin-top: 26px;
-  background: rgba(255,255,255,0.55);
+  background: rgba(255,255,255,0.6);
   backdrop-filter: blur(8px);
   border-radius: 26px;
   padding: 28px;
@@ -65,6 +117,15 @@ body {
   line-height: 1.8;
   box-shadow: 0 20px 40px rgba(0,0,0,0.12);
 }
+
+.like {
+  margin-top: 14px;
+  font-size: 26px;
+  cursor: pointer;
+  user-select: none;
+}
+
+.like.active { color: #e85b77; }
 
 .btn {
   margin-top: 26px;
@@ -77,16 +138,13 @@ body {
   cursor: pointer;
 }
 
-.btn:active {
-  transform: scale(0.97);
-}
-
 .footer {
   margin-top: 30px;
   font-size: 12px;
   opacity: 0.45;
 }
 
+/* tim bay */
 .heart {
   position: fixed;
   bottom: -20px;
@@ -103,6 +161,22 @@ body {
 
 <body>
 
+<!-- MENU -->
+<div class="menu-btn" onclick="toggleMenu()">☰</div>
+
+<div class="menu" id="menu">
+  <h3>📌 Đã lưu</h3>
+  <ul id="savedList"></ul>
+
+  <h3>✍️ Thêm câu</h3>
+  <textarea id="newText" placeholder="Chồng muốn nói gì với vợ…"></textarea>
+  <button onclick="addText()">Lưu</button>
+
+  <br><br>
+  <button onclick="toggleMenu()">⬅️ Thoát</button>
+</div>
+
+<!-- APP -->
 <div class="app">
   <div class="header">
     <h1>💗 Gửi Vợ Yêu 💗</h1>
@@ -114,6 +188,8 @@ body {
 
   <div class="card" id="message"></div>
 
+  <div class="like" id="like" onclick="toggleLike()">🤍</div>
+
   <button class="btn" onclick="next()">❤ Chồng dành cho vợ</button>
 
   <div class="footer">Tạo riêng cho vợ của chồng 🐱</div>
@@ -121,29 +197,21 @@ body {
 
 <script>
 const messages = [
-  `Vợ ơi anh nhớ vợ lắm.`,
-  `Lại một ngày được gặp vợ.`,
-  `Anh yêu vợ nhiều lắm.`,
-  `Chồng thương vợ theo cách rất yên.`,
-  `Huhu anh nhớ vợ lắm luôn.`,
-  `Có vợ là đủ một ngày.`,
-  `Vợ đang làm gì đó,<br>còn anh đang rất nhớ vợ luôn.`,
-  `Vợ là nơi chồng muốn quay về.`,
-  `Anh sẽ luôn trở về.`,
-  `Chồng ở lại, không đi đâu cả.`,
-  `Hôm nay gặp vợ thật là vui.`,
-  `Có vợ, lòng chồng yên.`,
-  `Có vợ thật là vui.`,
-  `Một ngày nữa được yêu vợ.`,
-  `Vợ ơi vợ biết không,<br>anh yêu vợ nhiều lắm.`,
-  `Vợ là điều đúng nhất đời chồng.`,
-  `Anh nhớ vợ.`,
-  `Nhớ vợ nhiều hơn hôm qua.`,
-  `Chỉ cần vợ bình an là đủ.`,
-  `Chồng ở đây.`
+  "Vợ ơi anh nhớ vợ lắm.",
+  "Anh yêu vợ nhiều lắm.",
+  "Huhu anh nhớ vợ lắm luôn.",
+  "Vợ đang làm gì đó, còn anh đang rất nhớ vợ.",
+  "Anh sẽ luôn trở về.",
+  "Hôm nay gặp vợ thật là vui.",
+  "Có vợ thật là vui.",
+  "Vợ biết không, anh yêu vợ nhiều lắm.",
+  "Lại một ngày được gặp vợ.",
+  "Chỉ cần có vợ, ngày nào cũng dịu lại."
 ];
 
 let used = [];
+let current = "";
+let saved = JSON.parse(localStorage.getItem("savedTexts") || "[]");
 
 function next() {
   if (used.length === messages.length) used = [];
@@ -152,12 +220,60 @@ function next() {
     i = Math.floor(Math.random() * messages.length);
   } while (used.includes(i));
   used.push(i);
-  document.getElementById("message").innerHTML = messages[i];
+
+  current = messages[i];
+  document.getElementById("message").innerText = current;
+  updateLike();
 }
 
+function toggleLike() {
+  if (!current) return;
+  if (saved.includes(current)) {
+    saved = saved.filter(t => t !== current);
+  } else {
+    saved.push(current);
+  }
+  localStorage.setItem("savedTexts", JSON.stringify(saved));
+  updateLike();
+  renderSaved();
+}
+
+function updateLike() {
+  const like = document.getElementById("like");
+  const liked = saved.includes(current);
+  like.innerText = liked ? "❤️" : "🤍";
+  like.classList.toggle("active", liked);
+}
+
+function toggleMenu() {
+  document.getElementById("menu").classList.toggle("show");
+  renderSaved();
+}
+
+function renderSaved() {
+  const ul = document.getElementById("savedList");
+  ul.innerHTML = "";
+  saved.forEach((t, i) => {
+    const li = document.createElement("li");
+    li.innerText = `${i + 1}. ${t}`;
+    ul.appendChild(li);
+  });
+}
+
+function addText() {
+  const t = document.getElementById("newText").value.trim();
+  if (!t) return;
+  messages.push(t);
+  document.getElementById("newText").value = "";
+  current = t;
+  document.getElementById("message").innerText = t;
+  updateLike();
+}
+
+// init
 next();
 
-// ngày tháng
+// date
 const d = new Date();
 document.getElementById("date").innerText =
   d.toLocaleDateString("vi-VN", {
@@ -167,7 +283,7 @@ document.getElementById("date").innerText =
     year: "numeric"
   });
 
-// tim bay
+// hearts
 setInterval(() => {
   const h = document.createElement("div");
   h.className = "heart";
@@ -178,7 +294,7 @@ setInterval(() => {
   setTimeout(() => h.remove(), 12000);
 }, 1400);
 
-// đăng ký service worker
+// service worker
 if ("serviceWorker" in navigator) {
   navigator.serviceWorker.register("sw.js");
 }
