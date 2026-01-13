@@ -1,280 +1,1187 @@
 <!DOCTYPE html>
 <html lang="vi">
 <head>
-<meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Gửi Vợ Yêu</title>
-
-<link rel="manifest" href="manifest.json">
-<meta name="theme-color" content="#f5b6c4">
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+<title>Gửi Vợ Yêu 💕</title>
 
 <style>
-body {
-  margin: 0;
-  min-height: 100vh;
+:root{
+  --pink:#e89aa8;
+  --bg:#fff2ee;
+  --text:#5a2f2f;
+}
+
+*{box-sizing:border-box}
+body{
+  margin:0;
   font-family: system-ui, -apple-system, "Segoe UI", sans-serif;
   background:
-    linear-gradient(rgba(255,200,210,0.55), rgba(255,200,210,0.55)),
-    url('bg.jpg') center/cover no-repeat;
-  display: flex;
-  justify-content: center;
-  align-items: center;
-  overflow: hidden;
+    linear-gradient(rgba(255,230,235,.7),rgba(255,230,235,.7)),
+    url("bg.jpg") center/cover no-repeat;
+  min-height:100vh;
+  color:var(--text);
+  overflow-x:hidden;
 }
 
-/* ===== MENU BUTTON ===== */
-.menu-btn {
-  position: fixed;
-  top: 16px;
-  left: 16px;
-  width: 48px;
-  height: 48px;
-  background: #ffffff;
-  border-radius: 50%;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  font-size: 22px;
-  cursor: pointer;
-  z-index: 99999;
-  box-shadow: 0 8px 22px rgba(0,0,0,0.28);
+/* ===== HEADER ICONS ===== */
+.top-icons{
+  position:fixed;
+  top:14px;
+  left:14px;
+  right:14px;
+  display:flex;
+  justify-content:space-between;
+  z-index:20;
+}
+.icon-btn{
+  width:40px;height:40px;
+  border-radius:50%;
+  background:rgba(255,255,255,.6);
+  display:flex;
+  align-items:center;
+  justify-content:center;
+  font-size:20px;
+  cursor:pointer;
 }
 
-/* ===== MENU PANEL ===== */
-.menu {
-  position: fixed;
-  top: 0;
-  left: -100%;
-  width: 78%;
-  height: 100%;
-  background: #ffffff;
-  padding: 18px;
-  transition: left 0.35s ease;
-  z-index: 99998;
-  overflow-y: auto;
+/* ===== MENU ===== */
+.menu{
+  position:fixed;
+  top:0;left:0;
+  width:280px;
+  height:100%;
+  background:rgba(255,245,242,.95);
+  backdrop-filter:blur(10px);
+  transform:translateX(-100%);
+  transition:.35s;
+  z-index:30;
+  padding:20px;
+}
+.menu.show{transform:translateX(0)}
+.menu h3{
+  margin:10px 0 20px;
+  font-weight:600;
+}
+.menu-item{
+  padding:14px 12px;
+  border-radius:14px;
+  margin-bottom:10px;
+  background:rgba(255,255,255,.6);
+}
+.menu-close{
+  position:absolute;
+  top:14px;right:14px;
+  font-size:22px;
+  cursor:pointer;
 }
 
-.menu.show {
-  left: 0;
+/* overlay */
+.overlay{
+  position:fixed;
+  inset:0;
+  background:rgba(0,0,0,.25);
+  display:none;
+  z-index:25;
 }
-
-.menu h3 {
-  margin: 14px 0 8px;
-}
-
-.menu .card {
-  font-size: 15px;
-  box-shadow: none;
-}
-
-.menu button {
-  width: 100%;
-  margin-top: 12px;
-  padding: 12px;
-  border: none;
-  border-radius: 16px;
-  background: #e98a9b;
-  color: #fff;
-  font-size: 15px;
-  cursor: pointer;
-}
+.overlay.show{display:block}
 
 /* ===== APP ===== */
-.app {
-  max-width: 380px;
-  width: 100%;
-  padding: 26px;
-  text-align: center;
-  color: #5a2f2f;
+.app{
+  max-width:380px;
+  margin:auto;
+  padding:90px 22px 40px;
+  text-align:center;
 }
 
-.header h1 {
-  font-size: 26px;
-  margin: 0;
+h1{
+  font-size:26px;
+  margin:0;
+  font-weight:600;
+}
+.date{
+  margin-top:6px;
+  font-size:14px;
+  opacity:.7;
+}
+.sub{
+  font-size:13px;
+  opacity:.6;
+  margin-top:4px;
 }
 
-.date {
-  margin-top: 6px;
-  font-size: 14px;
-  opacity: 0.7;
+/* ===== CARD ===== */
+.card{
+  margin-top:28px;
+  background:rgba(255,255,255,.6);
+  backdrop-filter:blur(8px);
+  border-radius:26px;
+  padding:26px;
+  line-height:1.7;
+  font-size:18px;
+  box-shadow:0 18px 36px rgba(0,0,0,.12);
+}
+.small-heart{
+  margin-top:12px;
+  opacity:.6;
+  font-size:18px;
 }
 
-.sub {
-  margin-top: 4px;
-  font-size: 13px;
-  opacity: 0.6;
+/* ===== BUTTON ===== */
+.btn{
+  margin-top:26px;
+  background:var(--pink);
+  border:none;
+  border-radius:30px;
+  padding:14px 28px;
+  font-size:16px;
+  color:white;
+  cursor:pointer;
 }
 
-.anchor {
-  margin-top: 18px;
-  font-size: 15px;
-  opacity: 0.55;
+/* ===== FOOTER ===== */
+.footer{
+  margin-top:28px;
+  font-size:12px;
+  opacity:.45;
 }
 
-.card {
-  margin-top: 26px;
-  background: rgba(255,255,255,0.6);
-  backdrop-filter: blur(8px);
-  border-radius: 26px;
-  padding: 28px;
-  font-size: 18px;
-  line-height: 1.8;
-  box-shadow: 0 20px 40px rgba(0,0,0,0.12);
+/* ===== FLOATING HEART ===== */
+.heart{
+  position:fixed;
+  bottom:-20px;
+  color:rgba(255,255,255,.6);
+  font-size:14px;
+  animation:float 12s linear forwards;
 }
-
-.like {
-  margin-top: 14px;
-  font-size: 26px;
-  cursor: pointer;
-  user-select: none;
-}
-
-.like.active {
-  color: #e85b77;
-}
-
-.btn {
-  margin-top: 24px;
-  background: #e98a9b;
-  border: none;
-  border-radius: 30px;
-  padding: 14px 28px;
-  font-size: 16px;
-  color: #fff;
-  cursor: pointer;
-}
-
-.footer {
-  margin-top: 28px;
-  font-size: 12px;
-  opacity: 0.45;
-}
-
-/* ===== HEART FLOAT ===== */
-.heart {
-  position: fixed;
-  bottom: -20px;
-  color: rgba(255,255,255,0.5);
-  font-size: 14px;
-  animation: float 12s linear forwards;
-}
-
-@keyframes float {
-  to { transform: translateY(-120vh); opacity: 0; }
+@keyframes float{
+  to{transform:translateY(-120vh);opacity:0}
 }
 </style>
 </head>
 
 <body>
 
-<!-- MENU BUTTON -->
-<div class="menu-btn" onclick="toggleMenu()">☰</div>
-
 <!-- MENU -->
 <div class="menu" id="menu">
-  <h3>🎮 Trò chơi cho hai vợ chồng</h3>
-  <div class="card" id="gameText">
-    Bấm chơi để xem hôm nay chúng mình làm gì nha.
-  </div>
-  <button onclick="playGame()">Chơi 🎲</button>
+  <div class="menu-close" onclick="toggleMenu()">✕</div>
+  <h3>Menu 💕</h3>
+  <div class="menu-item">🏠 Trang chủ</div>
+  <div class="menu-item">📷 Thêm ảnh</div>
+  <div class="menu-item">🖼️ Thư viện</div>
+  <div class="menu-item">💌 Thêm câu nói</div>
+  <div class="menu-item">🎮 Game vợ chồng</div>
+</div>
+<div class="overlay" id="overlay" onclick="toggleMenu()"></div>
 
-  <br><br>
-  <button onclick="toggleMenu()">⬅️ Thoát</button>
+<!-- TOP ICONS -->
+<div class="top-icons">
+  <div class="icon-btn" onclick="toggleMenu()">☰</div>
+  <div class="icon-btn">🔊</div>
 </div>
 
 <!-- APP -->
 <div class="app">
-  <div class="header">
-    <h1>💗 Gửi Vợ Yêu 💗</h1>
-    <div class="date" id="date"></div>
-    <div class="sub">Thêm một ngày chồng được yêu vợ</div>
-  </div>
-
-  <div class="anchor">Lại một ngày được gặp vợ</div>
+  <h1>💗 Gửi Vợ Yêu 💗</h1>
+  <div class="date" id="date"></div>
+  <div class="sub">Thêm một ngày chồng được yêu vợ 💕</div>
 
   <div class="card" id="message"></div>
+  <div class="small-heart">♡</div>
 
-  <div class="like" id="like" onclick="toggleLike()">🤍</div>
+  <button class="btn" onclick="nextMsg()">❤ Hôm nay anh nói với vợ</button>
 
-  <button class="btn" onclick="next()">❤ Chồng dành cho vợ</button>
-
-  <div class="footer">Tạo riêng cho vợ của chồng 🐱</div>
+  <div class="footer">Tạo riêng cho vợ của anh 💖</div>
 </div>
 
 <script>
-const messages = [
-  "Vợ ơi anh nhớ vợ lắm.",
+/* ===== MENU ===== */
+function toggleMenu(){
+  menu.classList.toggle("show");
+  overlay.classList.toggle("show");
+}
+
+/* ===== DATE ===== */
+const d=new Date();
+date.innerText=d.toLocaleDateString("vi-VN",{weekday:"long",day:"numeric",month:"long",year:"numeric"});
+
+/* ===== MESSAGES ===== */
+const messages=[
+"Vợ ơi, anh nhớ vợ lắm.",
+"Anh yêu vợ nhiều lắm.",
+"Hôm nay được gặp vợ thật là vui.",
+"Có vợ, ngày nào cũng đáng yêu hơn.",
+"Lại một ngày được gặp vợ."
+];
+let used=[];
+
+function nextMsg(){
+  if(used.length===messages.length) used=[];
+  let i;
+  do{i=Math.floor(Math.random()*messages.length)}while(used.includes(i));
+  used.push(i);
+  message.innerHTML=messages[i];
+}
+
+/* init */
+nextMsg();
+
+/* ===== HEART FLOAT ===== */
+setInterval(()=>{
+  const h=document.createElement("div");
+  h.className="heart";
+  h.innerText="❤";
+  h.style.left=Math.random()*100+"vw";
+  h.style.fontSize=10+Math.random()*10+"px";
+  document.body.appendChild(h);
+  setTimeout(()=>h.remove(),12000);
+},1500);
+</script>
+
+</body>
+</html>
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+<title>Gửi Vợ Yêu 💕</title>
+
+<style>
+:root{
+  --pink:#e89aa8;
+  --bg:#fff2ee;
+  --text:#5a2f2f;
+}
+*{box-sizing:border-box}
+body{
+  margin:0;
+  font-family: system-ui, -apple-system, "Segoe UI", sans-serif;
+  background:
+    linear-gradient(rgba(255,230,235,.7),rgba(255,230,235,.7)),
+    url("bg.jpg") center/cover no-repeat;
+  min-height:100vh;
+  color:var(--text);
+  overflow-x:hidden;
+}
+
+/* ===== TOP ICONS ===== */
+.top-icons{
+  position:fixed;
+  top:14px;left:14px;right:14px;
+  display:flex;
+  justify-content:space-between;
+  z-index:20;
+}
+.icon-btn{
+  width:40px;height:40px;
+  border-radius:50%;
+  background:rgba(255,255,255,.6);
+  display:flex;
+  align-items:center;
+  justify-content:center;
+  font-size:20px;
+  cursor:pointer;
+}
+
+/* ===== MENU ===== */
+.menu{
+  position:fixed;
+  top:0;left:0;
+  width:280px;height:100%;
+  background:rgba(255,245,242,.95);
+  backdrop-filter:blur(10px);
+  transform:translateX(-100%);
+  transition:.35s;
+  z-index:30;
+  padding:20px;
+}
+.menu.show{transform:translateX(0)}
+.menu h3{margin:10px 0 20px;font-weight:600}
+.menu-item{
+  padding:14px 12px;
+  border-radius:14px;
+  margin-bottom:10px;
+  background:rgba(255,255,255,.6);
+  cursor:pointer;
+}
+.menu-close{
+  position:absolute;
+  top:14px;right:14px;
+  font-size:22px;
+  cursor:pointer;
+}
+.overlay{
+  position:fixed;inset:0;
+  background:rgba(0,0,0,.25);
+  display:none;
+  z-index:25;
+}
+.overlay.show{display:block}
+
+/* ===== PAGES ===== */
+.page{
+  display:none;
+  max-width:380px;
+  margin:auto;
+  padding:90px 22px 40px;
+  text-align:center;
+}
+.page.active{display:block}
+
+/* ===== CARD ===== */
+.card{
+  margin-top:28px;
+  background:rgba(255,255,255,.6);
+  backdrop-filter:blur(8px);
+  border-radius:26px;
+  padding:26px;
+  line-height:1.7;
+  font-size:18px;
+  box-shadow:0 18px 36px rgba(0,0,0,.12);
+}
+.small-heart{margin-top:12px;opacity:.6}
+
+/* ===== BUTTON ===== */
+.btn{
+  margin-top:22px;
+  background:var(--pink);
+  border:none;
+  border-radius:30px;
+  padding:14px 28px;
+  font-size:16px;
+  color:white;
+  cursor:pointer;
+}
+
+/* ===== INPUT ===== */
+textarea{
+  width:100%;
+  padding:16px;
+  border-radius:20px;
+  border:none;
+  resize:none;
+  font-size:16px;
+  font-family:inherit;
+}
+.list{
+  margin-top:20px;
+  text-align:left;
+}
+.list div{
+  padding:10px;
+  border-radius:12px;
+  background:rgba(255,255,255,.6);
+  margin-bottom:8px;
+  font-size:14px;
+}
+
+/* ===== HEART FLOAT ===== */
+.heart{
+  position:fixed;
+  bottom:-20px;
+  color:rgba(255,255,255,.6);
+  font-size:14px;
+  animation:float 12s linear forwards;
+}
+@keyframes float{
+  to{transform:translateY(-120vh);opacity:0}
+}
+</style>
+</head>
+
+<body>
+
+<!-- MENU -->
+<div class="menu" id="menu">
+  <div class="menu-close" onclick="toggleMenu()">✕</div>
+  <h3>Menu 💕</h3>
+  <div class="menu-item" onclick="showPage('home')">🏠 Trang chủ</div>
+  <div class="menu-item" onclick="showPage('add')">💌 Thêm câu nói</div>
+</div>
+<div class="overlay" id="overlay" onclick="toggleMenu()"></div>
+
+<!-- TOP ICONS -->
+<div class="top-icons">
+  <div class="icon-btn" onclick="toggleMenu()">☰</div>
+  <div class="icon-btn">🔊</div>
+</div>
+
+<!-- HOME -->
+<div class="page active" id="home">
+  <h1>💗 Gửi Vợ Yêu 💗</h1>
+  <div id="date"></div>
+  <div style="font-size:13px;opacity:.6;margin-top:4px">
+    Thêm một ngày chồng được yêu vợ 💕
+  </div>
+
+  <div class="card" id="message"></div>
+  <div class="small-heart">♡</div>
+
+  <button class="btn" onclick="nextMsg()">❤ Hôm nay anh nói với vợ</button>
+</div>
+
+<!-- ADD MESSAGE -->
+<div class="page" id="add">
+  <h2>💌 Thêm câu nói</h2>
+  <textarea id="newMsg" rows="4" placeholder="Viết lời yêu thương gửi vợ... 💕"></textarea>
+  <button class="btn" onclick="saveMsg()">✔ Lưu câu nói</button>
+
+  <div class="list" id="msgList"></div>
+</div>
+
+<script>
+/* ===== MENU ===== */
+function toggleMenu(){
+  menu.classList.toggle("show");
+  overlay.classList.toggle("show");
+}
+function showPage(p){
+  document.querySelectorAll(".page").forEach(e=>e.classList.remove("active"));
+  document.getElementById(p).classList.add("active");
+  toggleMenu();
+}
+
+/* ===== DATE ===== */
+const d=new Date();
+date.innerText=d.toLocaleDateString("vi-VN",{weekday:"long",day:"numeric",month:"long",year:"numeric"});
+
+/* ===== MESSAGES ===== */
+let baseMessages=[
+  "Vợ ơi, anh nhớ vợ lắm.",
   "Anh yêu vợ nhiều lắm.",
-  "Huhu anh nhớ vợ lắm luôn.",
-  "Vợ đang làm gì đó, còn anh đang rất nhớ vợ.",
-  "Anh sẽ luôn trở về.",
-  "Hôm nay gặp vợ thật là vui.",
-  "Có vợ thật là vui.",
+  "Hôm nay được gặp vợ thật là vui.",
+  "Có vợ, ngày nào cũng đáng yêu hơn.",
   "Lại một ngày được gặp vợ."
 ];
 
-const games = [
-  "Hôm nay ôm nhau 1 phút nha.",
-  "Tối nay kể cho nhau nghe 1 chuyện nhỏ.",
-  "Hôm nay ai nhớ ai nhiều hơn?",
-  "Nhắn cho nhau 1 câu dễ thương liền.",
-  "Hôm nay cùng nhau cười nhiều hơn nha."
+let customMessages=JSON.parse(localStorage.getItem("loveMsgs")||"[]");
+let messages=[...baseMessages,...customMessages];
+let used=[];
+
+function nextMsg(){
+  if(used.length===messages.length) used=[];
+  let i;
+  do{i=Math.floor(Math.random()*messages.length)}while(used.includes(i));
+  used.push(i);
+  message.innerHTML=messages[i];
+}
+nextMsg();
+
+/* ===== SAVE MESSAGE ===== */
+function saveMsg(){
+  const val=newMsg.value.trim();
+  if(!val) return;
+  customMessages.push(val);
+  localStorage.setItem("loveMsgs",JSON.stringify(customMessages));
+  messages=[...baseMessages,...customMessages];
+  newMsg.value="";
+  renderList();
+}
+
+function renderList(){
+  msgList.innerHTML="";
+  customMessages.forEach((m,i)=>{
+    const d=document.createElement("div");
+    d.textContent=(i+1)+". "+m;
+    msgList.appendChild(d);
+  });
+}
+renderList();
+
+/* ===== HEART FLOAT ===== */
+setInterval(()=>{
+  const h=document.createElement("div");
+  h.className="heart";
+  h.innerText="❤";
+  h.style.left=Math.random()*100+"vw";
+  h.style.fontSize=10+Math.random()*10+"px";
+  document.body.appendChild(h);
+  setTimeout(()=>h.remove(),12000);
+},1500);
+</script>
+
+</body>
+</html>
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+<title>Gửi Vợ Yêu 💕</title>
+
+<style>
+:root{
+  --pink:#e89aa8;
+  --text:#5a2f2f;
+}
+*{box-sizing:border-box}
+body{
+  margin:0;
+  font-family: system-ui, -apple-system, "Segoe UI", sans-serif;
+  background:
+    linear-gradient(rgba(255,230,235,.7),rgba(255,230,235,.7)),
+    url("bg.jpg") center/cover no-repeat;
+  min-height:100vh;
+  color:var(--text);
+  overflow-x:hidden;
+}
+
+/* TOP ICONS */
+.top-icons{
+  position:fixed;
+  top:14px;left:14px;right:14px;
+  display:flex;
+  justify-content:space-between;
+  z-index:20;
+}
+.icon-btn{
+  width:40px;height:40px;
+  border-radius:50%;
+  background:rgba(255,255,255,.6);
+  display:flex;
+  align-items:center;
+  justify-content:center;
+  font-size:20px;
+  cursor:pointer;
+}
+
+/* MENU */
+.menu{
+  position:fixed;
+  top:0;left:0;
+  width:280px;height:100%;
+  background:rgba(255,245,242,.95);
+  backdrop-filter:blur(10px);
+  transform:translateX(-100%);
+  transition:.35s;
+  z-index:30;
+  padding:20px;
+}
+.menu.show{transform:translateX(0)}
+.menu h3{margin:10px 0 20px}
+.menu-item{
+  padding:14px 12px;
+  border-radius:14px;
+  margin-bottom:10px;
+  background:rgba(255,255,255,.6);
+  cursor:pointer;
+}
+.menu-close{
+  position:absolute;
+  top:14px;right:14px;
+  font-size:22px;
+  cursor:pointer;
+}
+.overlay{
+  position:fixed;inset:0;
+  background:rgba(0,0,0,.25);
+  display:none;
+  z-index:25;
+}
+.overlay.show{display:block}
+
+/* PAGES */
+.page{
+  display:none;
+  max-width:380px;
+  margin:auto;
+  padding:90px 22px 40px;
+  text-align:center;
+}
+.page.active{display:block}
+
+/* CARD */
+.card{
+  margin-top:28px;
+  background:rgba(255,255,255,.6);
+  backdrop-filter:blur(8px);
+  border-radius:26px;
+  padding:26px;
+  line-height:1.7;
+  font-size:18px;
+  box-shadow:0 18px 36px rgba(0,0,0,.12);
+}
+
+/* BUTTON */
+.btn{
+  margin-top:22px;
+  background:var(--pink);
+  border:none;
+  border-radius:30px;
+  padding:14px 28px;
+  font-size:16px;
+  color:white;
+  cursor:pointer;
+}
+
+/* INPUT */
+textarea{
+  width:100%;
+  padding:16px;
+  border-radius:20px;
+  border:none;
+  resize:none;
+  font-size:16px;
+  font-family:inherit;
+}
+
+/* LIST */
+.list{
+  margin-top:20px;
+  text-align:left;
+}
+.list div{
+  padding:10px;
+  border-radius:12px;
+  background:rgba(255,255,255,.6);
+  margin-bottom:8px;
+  font-size:14px;
+}
+
+/* HEART FLOAT */
+.heart{
+  position:fixed;
+  bottom:-20px;
+  color:rgba(255,255,255,.6);
+  font-size:14px;
+  animation:float 12s linear forwards;
+}
+@keyframes float{
+  to{transform:translateY(-120vh);opacity:0}
+}
+</style>
+</head>
+
+<body>
+
+<!-- MENU -->
+<div class="menu" id="menu">
+  <div class="menu-close" onclick="toggleMenu()">✕</div>
+  <h3>Menu 💕</h3>
+  <div class="menu-item" onclick="showPage('home')">🏠 Trang chủ</div>
+  <div class="menu-item" onclick="showPage('add')">💌 Thêm câu nói</div>
+  <div class="menu-item" onclick="showPage('game')">🎮 Game vợ chồng</div>
+</div>
+<div class="overlay" id="overlay" onclick="toggleMenu()"></div>
+
+<!-- TOP ICONS -->
+<div class="top-icons">
+  <div class="icon-btn" onclick="toggleMenu()">☰</div>
+  <div class="icon-btn">🔊</div>
+</div>
+
+<!-- HOME -->
+<div class="page active" id="home">
+  <h1>💗 Gửi Vợ Yêu 💗</h1>
+  <div id="date"></div>
+  <div style="font-size:13px;opacity:.6;margin-top:4px">
+    Thêm một ngày chồng được yêu vợ 💕
+  </div>
+
+  <div class="card" id="message"></div>
+  <button class="btn" onclick="nextMsg()">❤ Hôm nay anh nói với vợ</button>
+</div>
+
+<!-- ADD MESSAGE -->
+<div class="page" id="add">
+  <h2>💌 Thêm câu nói</h2>
+  <textarea id="newMsg" rows="4" placeholder="Viết lời yêu thương gửi vợ... 💕"></textarea>
+  <button class="btn" onclick="saveMsg()">✔ Lưu câu nói</button>
+  <div class="list" id="msgList"></div>
+</div>
+
+<!-- GAME -->
+<div class="page" id="game">
+  <h2>🎮 Hôm nay chúng mình…</h2>
+  <div class="card" id="gameText"></div>
+  <button class="btn" onclick="nextGame()">🎲 Gợi ý khác</button>
+</div>
+
+<script>
+/* MENU */
+function toggleMenu(){
+  menu.classList.toggle("show");
+  overlay.classList.toggle("show");
+}
+function showPage(p){
+  document.querySelectorAll(".page").forEach(e=>e.classList.remove("active"));
+  document.getElementById(p).classList.add("active");
+  toggleMenu();
+}
+
+/* DATE */
+date.innerText=new Date().toLocaleDateString("vi-VN",{weekday:"long",day:"numeric",month:"long",year:"numeric"});
+
+/* MESSAGES */
+let baseMessages=[
+  "Vợ ơi, anh nhớ vợ lắm.",
+  "Anh yêu vợ nhiều lắm.",
+  "Hôm nay được gặp vợ thật là vui.",
+  "Có vợ, ngày nào cũng đáng yêu hơn.",
+  "Lại một ngày được gặp vợ."
 ];
+let customMessages=JSON.parse(localStorage.getItem("loveMsgs")||"[]");
+let messages=[...baseMessages,...customMessages];
+let used=[];
 
-let current = "";
-let liked = false;
+function nextMsg(){
+  if(used.length===messages.length) used=[];
+  let i;
+  do{i=Math.floor(Math.random()*messages.length)}while(used.includes(i));
+  used.push(i);
+  message.innerHTML=messages[i];
+}
+nextMsg();
 
-function next() {
-  const i = Math.floor(Math.random() * messages.length);
-  current = messages[i];
-  document.getElementById("message").innerText = current;
-  liked = false;
-  updateLike();
+/* SAVE MESSAGE */
+function saveMsg(){
+  const v=newMsg.value.trim();
+  if(!v) return;
+  customMessages.push(v);
+  localStorage.setItem("loveMsgs",JSON.stringify(customMessages));
+  messages=[...baseMessages,...customMessages];
+  newMsg.value="";
+  renderList();
+}
+function renderList(){
+  msgList.innerHTML="";
+  customMessages.forEach((m,i)=>{
+    const d=document.createElement("div");
+    d.textContent=(i+1)+". "+m;
+    msgList.appendChild(d);
+  });
+}
+renderList();
+
+/* GAME */
+const games=[
+  "Ôm nhau 30 giây không nói gì 💞",
+  "Nói cho nhau 1 điều đang nghĩ",
+  "Hôm nay ai nhớ ai nhiều hơn?",
+  "Tối nay kể cho nhau 1 chuyện nhỏ",
+  "Nắm tay nhau 1 phút nha",
+  "Gửi cho nhau 1 tin nhắn dễ thương"
+];
+function nextGame(){
+  gameText.innerText=games[Math.floor(Math.random()*games.length)];
+}
+nextGame();
+
+/* HEART FLOAT */
+setInterval(()=>{
+  const h=document.createElement("div");
+  h.className="heart";
+  h.innerText="❤";
+  h.style.left=Math.random()*100+"vw";
+  h.style.fontSize=10+Math.random()*10+"px";
+  document.body.appendChild(h);
+  setTimeout(()=>h.remove(),12000);
+},1500);
+</script>
+
+</body>
+  </html>
+  <!DOCTYPE html>
+<html lang="vi">
+<head>
+<meta charset="UTF-8"/>
+<meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+<title>Gửi Vợ Yêu 💕</title>
+
+<style>
+:root{--pink:#e89aa8;--text:#5a2f2f}
+*{box-sizing:border-box}
+body{
+  margin:0;font-family:system-ui;
+  background:
+    linear-gradient(rgba(255,230,235,.7),rgba(255,230,235,.7)),
+    url("bg.jpg") center/cover no-repeat;
+  min-height:100vh;color:var(--text);
 }
 
-function toggleLike() {
-  liked = !liked;
-  updateLike();
+/* TOP */
+.top-icons{position:fixed;top:14px;left:14px;right:14px;
+display:flex;justify-content:space-between;z-index:20}
+.icon-btn{
+  width:40px;height:40px;border-radius:50%;
+  background:rgba(255,255,255,.6);
+  display:flex;align-items:center;justify-content:center;
+  font-size:20px;cursor:pointer
 }
 
-function updateLike() {
-  const like = document.getElementById("like");
-  like.innerText = liked ? "❤️" : "🤍";
-  like.classList.toggle("active", liked);
+/* MENU */
+.menu{
+  position:fixed;top:0;left:0;width:280px;height:100%;
+  background:rgba(255,245,242,.95);
+  backdrop-filter:blur(10px);
+  transform:translateX(-100%);
+  transition:.35s;z-index:30;padding:20px
+}
+.menu.show{transform:translateX(0)}
+.menu-item{
+  padding:14px;border-radius:14px;
+  background:rgba(255,255,255,.6);
+  margin-bottom:10px;cursor:pointer
+}
+.menu-close{position:absolute;top:14px;right:14px;font-size:22px}
+.overlay{position:fixed;inset:0;background:rgba(0,0,0,.25);display:none;z-index:25}
+.overlay.show{display:block}
+
+/* PAGE */
+.page{display:none;max-width:380px;margin:auto;padding:90px 22px 40px;text-align:center}
+.page.active{display:block}
+
+/* CARD */
+.card{
+  margin-top:28px;
+  background:rgba(255,255,255,.6);
+  backdrop-filter:blur(8px);
+  border-radius:26px;padding:26px;
+  box-shadow:0 18px 36px rgba(0,0,0,.12)
 }
 
-function toggleMenu() {
-  document.getElementById("menu").classList.toggle("show");
+/* BUTTON */
+.btn{
+  margin-top:20px;background:var(--pink);
+  border:none;border-radius:30px;
+  padding:14px 28px;font-size:16px;color:white
 }
 
-function playGame() {
-  const g = games[Math.floor(Math.random() * games.length)];
-  document.getElementById("gameText").innerText = g;
+/* TEXTAREA */
+textarea{
+  width:100%;padding:14px;border-radius:18px;
+  border:none;font-size:15px;font-family:inherit
+}
+
+/* GALLERY */
+.grid{
+  display:grid;
+  grid-template-columns:repeat(3,1fr);
+  gap:10px;margin-top:20px
+}
+.grid img{
+  width:100%;aspect-ratio:1/1;
+  object-fit:cover;border-radius:16px;cursor:pointer
+}
+
+/* VIEWER */
+.viewer{
+  position:fixed;inset:0;background:rgba(0,0,0,.85);
+  display:none;align-items:center;justify-content:center;flex-direction:column;z-index:99
+}
+.viewer.show{display:flex}
+.viewer img{max-width:90%;max-height:70%;border-radius:18px}
+.viewer p{color:white;margin-top:12px}
+.viewer span{color:white;font-size:22px;margin-top:20px;cursor:pointer}
+
+/* HEART FLOAT */
+.heart{
+  position:fixed;bottom:-20px;color:rgba(255,255,255,.6);
+  animation:float 12s linear forwards
+}
+@keyframes float{to{transform:translateY(-120vh);opacity:0}}
+</style>
+</head>
+
+<body>
+
+<!-- MENU -->
+<div class="menu" id="menu">
+  <div class="menu-close" onclick="toggleMenu()">✕</div>
+  <div class="menu-item" onclick="showPage('home')">🏠 Trang chủ</div>
+  <div class="menu-item" onclick="showPage('add')">💌 Thêm câu nói</div>
+  <div class="menu-item" onclick="showPage('game')">🎮 Game vợ chồng</div>
+  <div class="menu-item" onclick="showPage('photo')">📷 Thêm ảnh</div>
+  <div class="menu-item" onclick="showPage('gallery')">🖼️ Thư viện</div>
+</div>
+<div class="overlay" id="overlay" onclick="toggleMenu()"></div>
+
+<div class="top-icons">
+  <div class="icon-btn" onclick="toggleMenu()">☰</div>
+</div>
+
+<!-- HOME -->
+<div class="page active" id="home">
+  <h1>💗 Gửi Vợ Yêu 💗</h1>
+  <div class="card" id="message"></div>
+  <button class="btn" onclick="nextMsg()">❤ Hôm nay anh nói với vợ</button>
+</div>
+
+<!-- ADD MESSAGE -->
+<div class="page" id="add">
+  <textarea id="newMsg" rows="3" placeholder="Viết lời yêu cho vợ..."></textarea>
+  <button class="btn" onclick="saveMsg()">Lưu</button>
+</div>
+
+<!-- GAME -->
+<div class="page" id="game">
+  <div class="card" id="gameText"></div>
+  <button class="btn" onclick="nextGame()">🎲 Gợi ý khác</button>
+</div>
+
+<!-- ADD PHOTO -->
+<div class="page" id="photo">
+  <input type="file" id="imgInput" accept="image/*"><br><br>
+  <textarea id="caption" rows="2" placeholder="Kỷ niệm này..."></textarea>
+  <button class="btn" onclick="savePhoto()">Lưu ảnh</button>
+</div>
+
+<!-- GALLERY -->
+<div class="page" id="gallery">
+  <div class="grid" id="grid"></div>
+</div>
+
+<!-- VIEWER -->
+<div class="viewer" id="viewer">
+  <img id="viewImg">
+  <p id="viewCap"></p>
+  <span onclick="closeView()">✕</span>
+</div>
+
+<script>
+/* MENU */
+function toggleMenu(){menu.classList.toggle("show");overlay.classList.toggle("show")}
+function showPage(p){
+ document.querySelectorAll(".page").forEach(e=>e.classList.remove("active"));
+ document.getElementById(p).classList.add("active");
+ toggleMenu();
+}
+
+/* MESSAGES */
+let messages=JSON.parse(localStorage.getItem("msgs"))||[
+ "Vợ ơi, anh nhớ vợ lắm.",
+ "Anh yêu vợ nhiều lắm.",
+ "Lại một ngày được gặp vợ."
+];
+function nextMsg(){message.innerText=messages[Math.floor(Math.random()*messages.length)]}
+function saveMsg(){
+ if(!newMsg.value.trim())return;
+ messages.push(newMsg.value.trim());
+ localStorage.setItem("msgs",JSON.stringify(messages));
+ newMsg.value="";
+}
+
+/* GAME */
+const games=[
+ "Ôm nhau 30 giây 💞",
+ "Nói 1 điều đang nghĩ",
+ "Ai nhớ ai nhiều hơn?"
+];
+function nextGame(){gameText.innerText=games[Math.floor(Math.random()*games.length)]}
+nextGame();nextMsg();
+
+/* PHOTOS */
+let photos=JSON.parse(localStorage.getItem("photos"))||[];
+function savePhoto(){
+ const file=imgInput.files[0];
+ if(!file)return;
+ const reader=new FileReader();
+ reader.onload=()=>{
+  photos.push({img:reader.result,cap:caption.value});
+  localStorage.setItem("photos",JSON.stringify(photos));
+  caption.value="";imgInput.value="";
+  renderGallery();
+ };
+ reader.readAsDataURL(file);
+}
+function renderGallery(){
+ grid.innerHTML="";
+ photos.forEach(p=>{
+  const i=document.createElement
+   <!DOCTYPE html>
+<html lang="vi">
+<head>
+<meta charset="UTF-8"/>
+<meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+<title>Gửi Vợ Yêu 💕</title>
+
+<style>
+:root{--pink:#e89aa8;--text:#5a2f2f}
+*{box-sizing:border-box}
+body{
+  margin:0;font-family:system-ui;
+  background:
+    linear-gradient(rgba(255,230,235,.7),rgba(255,230,235,.7)),
+    url("bg.jpg") center/cover no-repeat;
+  min-height:100vh;color:var(--text);
+}
+
+/* TOP */
+.top-icons{position:fixed;top:14px;left:14px;right:14px;
+display:flex;justify-content:space-between;z-index:20}
+.icon-btn{
+  width:40px;height:40px;border-radius:50%;
+  background:rgba(255,255,255,.6);
+  display:flex;align-items:center;justify-content:center;
+  font-size:20px;cursor:pointer
+}
+
+/* MENU */
+.menu{
+  position:fixed;top:0;left:0;width:280px;height:100%;
+  background:rgba(255,245,242,.95);
+  backdrop-filter:blur(10px);
+  transform:translateX(-100%);
+  transition:.35s;z-index:30;padding:20px
+}
+.menu.show{transform:translateX(0)}
+.menu-item{
+  padding:14px;border-radius:14px;
+  background:rgba(255,255,255,.6);
+  margin-bottom:10px;cursor:pointer
+}
+.menu-close{position:absolute;top:14px;right:14px;font-size:22px}
+.overlay{position:fixed;inset:0;background:rgba(0,0,0,.25);display:none;z-index:25}
+.overlay.show{display:block}
+
+/* PAGE */
+.page{display:none;max-width:380px;margin:auto;padding:90px 22px 40px;text-align:center}
+.page.active{display:block}
+
+/* CARD */
+.card{
+  margin-top:28px;
+  background:rgba(255,255,255,.6);
+  backdrop-filter:blur(8px);
+  border-radius:26px;padding:26px;
+  box-shadow:0 18px 36px rgba(0,0,0,.12);
+  line-height:1.7;font-size:18px
+}
+
+/* HEART */
+.like{
+  margin-top:14px;
+  font-size:28px;
+  cursor:pointer;
+  user-select:none;
+}
+.like.active{color:#e44}
+
+/* BUTTON */
+.btn{
+  margin-top:20px;background:var(--pink);
+  border:none;border-radius:30px;
+  padding:14px 28px;font-size:16px;color:white
+}
+
+/* LIST */
+.list{text-align:left;margin-top:20px}
+.list div{
+  padding:10px;border-radius:12px;
+  background:rgba(255,255,255,.6);
+  margin-bottom:8px;font-size:14px
+}
+
+/* HEART FLOAT */
+.heart{
+  position:fixed;bottom:-20px;color:rgba(255,255,255,.6);
+  animation:float 12s linear forwards
+}
+@keyframes float{to{transform:translateY(-120vh);opacity:0}}
+</style>
+</head>
+
+<body>
+
+<!-- MENU -->
+<div class="menu" id="menu">
+  <div class="menu-close" onclick="toggleMenu()">✕</div>
+  <div class="menu-item" onclick="showPage('home')">🏠 Trang chủ</div>
+  <div class="menu-item" onclick="showPage('add')">💌 Thêm câu nói</div>
+  <div class="menu-item" onclick="showPage('saved')">❤️ Câu đã lưu</div>
+</div>
+<div class="overlay" id="overlay" onclick="toggleMenu()"></div>
+
+<div class="top-icons">
+  <div class="icon-btn" onclick="toggleMenu()">☰</div>
+</div>
+
+<!-- HOME -->
+<div class="page active" id="home">
+  <h1>💗 Gửi Vợ Yêu 💗</h1>
+  <div class="card" id="message"></div>
+  <div class="like" id="like" ondblclick="toggleLike()">🤍</div>
+  <button class="btn" onclick="nextMsg()">❤ Hôm nay anh nói với vợ</button>
+</div>
+
+<!-- ADD -->
+<div class="page" id="add">
+  <textarea id="newMsg" rows="3" placeholder="Viết lời yêu cho vợ..."></textarea>
+  <button class="btn" onclick="saveMsg()">Lưu</button>
+</div>
+
+<!-- SAVED -->
+<div class="page" id="saved">
+  <h2>❤️ Câu vợ thích</h2>
+  <div class="list" id="savedList"></div>
+</div>
+
+<script>
+/* MENU */
+function toggleMenu(){menu.classList.toggle("show");overlay.classList.toggle("show")}
+function showPage(p){
+ document.querySelectorAll(".page").forEach(e=>e.classList.remove("active"));
+ document.getElementById(p).classList.add("active");
+ if(p==="saved") renderSaved();
+ toggleMenu();
+}
+
+/* DATA */
+let messages=JSON.parse(localStorage.getItem("msgs"))||[
+ "Vợ ơi, anh nhớ vợ lắm.",
+ "Anh yêu vợ nhiều lắm.",
+ "Lại một ngày được gặp vợ."
+];
+let saved=JSON.parse(localStorage.getItem("saved"))||[];
+let current="";
+
+/* HOME */
+function nextMsg(){
+ current=messages[Math.floor(Math.random()*messages.length)];
+ message.innerText=current;
+ updateLike();
+}
+function toggleLike(){
+ if(!current)return;
+ let i=saved.indexOf(current);
+ if(i===-1) saved.push(current);
+ else saved.splice(i,1);
+ localStorage.setItem("saved",JSON.stringify(saved));
+ updateLike();
+}
+function updateLike(){
+ like.innerText=saved.includes(current)?"❤️":"🤍";
+ like.classList.toggle("active",saved.includes(current));
+}
+
+/* ADD */
+function saveMsg(){
+ if(!newMsg.value.trim())return;
+ messages.push(newMsg.value.trim());
+ localStorage.setItem("msgs",JSON.stringify(messages));
+ newMsg.value="";
+}
+
+/* SAVED */
+function renderSaved(){
+ savedList.innerHTML=saved.length
+  ? saved.map((s,i)=>`<div>${i+1}. ${s}</div>`).join("")
+  : "Chưa có câu nào";
 }
 
 /* INIT */
-next();
-document.getElementById("date").innerText =
-  new Date().toLocaleDateString("vi-VN", {
-    weekday: "long",
-    day: "numeric",
-    month: "long",
-    year: "numeric"
-  });
+nextMsg();
 
-setInterval(() => {
-  const h = document.createElement("div");
-  h.className = "heart";
-  h.innerText = "❤";
-  h.style.left = Math.random() * 100 + "vw";
-  h.style.fontSize = 10 + Math.random() * 10 + "px";
-  document.body.appendChild(h);
-  setTimeout(() => h.remove(), 12000);
-}, 1600);
-
-if ("serviceWorker" in navigator) {
-  navigator.serviceWorker.register("sw.js");
-}
+/* HEART FLOAT */
+setInterval(()=>{
+ const h=document.createElement("div");
+ h.className="heart";h.innerText="❤";
+ h.style.left=Math.random()*100+"vw";
+ h.style.fontSize=10+Math.random()*10+"px";
+ document.body.appendChild(h);
+ setTimeout(()=>h.remove(),12000);
+},1500);
 </script>
 
 </body>
