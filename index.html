@@ -22,57 +22,53 @@ body {
   overflow: hidden;
 }
 
-/* MENU */
+/* MENU BUTTON */
 .menu-btn {
   position: fixed;
-  top: 16px;
-  left: 16px;
-  font-size: 26px;
+  top: 14px;
+  left: 14px;
+  width: 44px;
+  height: 44px;
+  background: rgba(255,255,255,0.85);
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 22px;
   cursor: pointer;
-  z-index: 20;
+  z-index: 50;
+  box-shadow: 0 6px 16px rgba(0,0,0,0.18);
 }
 
+/* MENU */
 .menu {
   position: fixed;
   top: 0;
   left: -100%;
-  width: 80%;
+  width: 78%;
   height: 100%;
   background: #fff;
   padding: 18px;
-  transition: 0.3s;
-  z-index: 30;
+  transition: 0.35s ease;
+  z-index: 60;
   overflow-y: auto;
 }
 
 .menu.show { left: 0; }
 
 .menu h3 {
-  margin: 10px 0;
-}
-
-.menu ul {
-  padding-left: 18px;
-  font-size: 14px;
-}
-
-.menu textarea {
-  width: 100%;
-  min-height: 80px;
-  border-radius: 14px;
-  border: 1px solid #ddd;
-  padding: 10px;
-  font-family: inherit;
+  margin: 14px 0 8px;
 }
 
 .menu button {
+  width: 100%;
   margin-top: 10px;
-  padding: 10px 18px;
+  padding: 12px;
   border: none;
-  border-radius: 20px;
+  border-radius: 14px;
   background: #e98a9b;
   color: #fff;
-  cursor: pointer;
+  font-size: 15px;
 }
 
 /* APP */
@@ -84,28 +80,10 @@ body {
   color: #5a2f2f;
 }
 
-.header h1 {
-  font-size: 26px;
-  margin: 0;
-}
-
-.date {
-  margin-top: 6px;
-  font-size: 14px;
-  opacity: 0.7;
-}
-
-.sub {
-  margin-top: 4px;
-  font-size: 13px;
-  opacity: 0.6;
-}
-
-.anchor {
-  margin-top: 18px;
-  font-size: 15px;
-  opacity: 0.55;
-}
+.header h1 { margin: 0; font-size: 26px; }
+.date { margin-top: 6px; font-size: 14px; opacity: .7; }
+.sub { font-size: 13px; opacity: .6; margin-top: 4px; }
+.anchor { margin-top: 18px; font-size: 15px; opacity: .55; }
 
 .card {
   margin-top: 26px;
@@ -122,29 +100,22 @@ body {
   margin-top: 14px;
   font-size: 26px;
   cursor: pointer;
-  user-select: none;
 }
-
 .like.active { color: #e85b77; }
 
 .btn {
-  margin-top: 26px;
+  margin-top: 24px;
   background: #e98a9b;
   border: none;
   border-radius: 30px;
   padding: 14px 28px;
   font-size: 16px;
   color: #fff;
-  cursor: pointer;
 }
 
-.footer {
-  margin-top: 30px;
-  font-size: 12px;
-  opacity: 0.45;
-}
+.footer { margin-top: 28px; font-size: 12px; opacity: .45; }
 
-/* tim bay */
+/* HEART FLOAT */
 .heart {
   position: fixed;
   bottom: -20px;
@@ -152,10 +123,7 @@ body {
   font-size: 14px;
   animation: float 12s linear forwards;
 }
-
-@keyframes float {
-  to { transform: translateY(-120vh); opacity: 0; }
-}
+@keyframes float { to { transform: translateY(-120vh); opacity: 0; } }
 </style>
 </head>
 
@@ -165,12 +133,11 @@ body {
 <div class="menu-btn" onclick="toggleMenu()">☰</div>
 
 <div class="menu" id="menu">
-  <h3>📌 Đã lưu</h3>
-  <ul id="savedList"></ul>
-
-  <h3>✍️ Thêm câu</h3>
-  <textarea id="newText" placeholder="Chồng muốn nói gì với vợ…"></textarea>
-  <button onclick="addText()">Lưu</button>
+  <h3>🎮 Trò chơi cho hai vợ chồng</h3>
+  <div class="card" id="gameText" style="font-size:15px; box-shadow:none;">
+    Bấm chơi để xem hôm nay chúng mình làm gì nha.
+  </div>
+  <button onclick="playGame()">Chơi 🎲</button>
 
   <br><br>
   <button onclick="toggleMenu()">⬅️ Thoát</button>
@@ -199,102 +166,63 @@ body {
 const messages = [
   "Vợ ơi anh nhớ vợ lắm.",
   "Anh yêu vợ nhiều lắm.",
-  "Huhu anh nhớ vợ lắm luôn.",
-  "Vợ đang làm gì đó, còn anh đang rất nhớ vợ.",
   "Anh sẽ luôn trở về.",
   "Hôm nay gặp vợ thật là vui.",
-  "Có vợ thật là vui.",
-  "Vợ biết không, anh yêu vợ nhiều lắm.",
-  "Lại một ngày được gặp vợ.",
-  "Chỉ cần có vợ, ngày nào cũng dịu lại."
+  "Có vợ thật là vui."
+];
+
+const games = [
+  "Hôm nay ôm nhau 1 phút nha.",
+  "Tối nay kể cho nhau nghe 1 chuyện nhỏ.",
+  "Hôm nay ai nhớ ai nhiều hơn?",
+  "Nhắn cho nhau 1 câu dễ thương liền.",
+  "Hôm nay cùng nhau cười nhiều hơn nha."
 ];
 
 let used = [];
 let current = "";
-let saved = JSON.parse(localStorage.getItem("savedTexts") || "[]");
+let saved = [];
 
 function next() {
-  if (used.length === messages.length) used = [];
-  let i;
-  do {
-    i = Math.floor(Math.random() * messages.length);
-  } while (used.includes(i));
-  used.push(i);
-
+  let i = Math.floor(Math.random() * messages.length);
   current = messages[i];
   document.getElementById("message").innerText = current;
-  updateLike();
 }
 
 function toggleLike() {
-  if (!current) return;
-  if (saved.includes(current)) {
-    saved = saved.filter(t => t !== current);
-  } else {
-    saved.push(current);
-  }
-  localStorage.setItem("savedTexts", JSON.stringify(saved));
-  updateLike();
-  renderSaved();
-}
-
-function updateLike() {
   const like = document.getElementById("like");
-  const liked = saved.includes(current);
-  like.innerText = liked ? "❤️" : "🤍";
-  like.classList.toggle("active", liked);
+  like.classList.toggle("active");
+  like.innerText = like.classList.contains("active") ? "❤️" : "🤍";
 }
 
 function toggleMenu() {
   document.getElementById("menu").classList.toggle("show");
-  renderSaved();
 }
 
-function renderSaved() {
-  const ul = document.getElementById("savedList");
-  ul.innerHTML = "";
-  saved.forEach((t, i) => {
-    const li = document.createElement("li");
-    li.innerText = `${i + 1}. ${t}`;
-    ul.appendChild(li);
-  });
-}
-
-function addText() {
-  const t = document.getElementById("newText").value.trim();
-  if (!t) return;
-  messages.push(t);
-  document.getElementById("newText").value = "";
-  current = t;
-  document.getElementById("message").innerText = t;
-  updateLike();
+function playGame() {
+  const g = games[Math.floor(Math.random() * games.length)];
+  document.getElementById("gameText").innerText = g;
 }
 
 // init
 next();
-
-// date
-const d = new Date();
 document.getElementById("date").innerText =
-  d.toLocaleDateString("vi-VN", {
+  new Date().toLocaleDateString("vi-VN", {
     weekday: "long",
     day: "numeric",
     month: "long",
     year: "numeric"
   });
 
-// hearts
 setInterval(() => {
   const h = document.createElement("div");
   h.className = "heart";
   h.innerText = "❤";
   h.style.left = Math.random() * 100 + "vw";
-  h.style.fontSize = 10 + Math.random() * 10 + "px";
   document.body.appendChild(h);
   setTimeout(() => h.remove(), 12000);
-}, 1400);
+}, 1600);
 
-// service worker
 if ("serviceWorker" in navigator) {
   navigator.serviceWorker.register("sw.js");
 }
